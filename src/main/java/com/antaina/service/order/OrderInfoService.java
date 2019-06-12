@@ -71,4 +71,8 @@ public class OrderInfoService {
             }
         }
     }
+
+    public OrderInfo getById(Long id) {
+        return orderInfoMapper.selectByPrimaryKey(id);
+    }
 }

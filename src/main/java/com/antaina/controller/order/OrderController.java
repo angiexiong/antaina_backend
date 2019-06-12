@@ -1,5 +1,7 @@
 package com.antaina.controller.order;
 
+import com.antaina.entity.customer.CustomerInfo;
+import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
 import com.antaina.model.order.OrderInfoModel;
@@ -51,4 +53,10 @@ public class OrderController {
         return RespBuilder.build(BaseResult.SUCCESS);
     }
 
+    @ApiOperation(value = "根据id获取订单信息")
+    @GetMapping("/getById")
+    public ResponseEntity getById(Long id){
+        OrderInfo orderInfo = orderInfoService.getById(id);
+        return RespBuilder.build(BaseResult.SUCCESS, orderInfo);
+    }
 }
