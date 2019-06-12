@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.antaina.mapper.OrderInfoMapper">
+    <select id="getOrderListByParams" resultType="com.antaina.model.order.OrderInfoQueryModel">
+        SELECT oi.* , c.`name` as customer_name ,p.`product_name`,p.`model` as product_model
+        FROM order_info oi
+        LEFT JOIN `customer_info` c ON oi.`customer_id` = c.`id`
+        LEFT JOIN `product_info` p ON oi.`product_code` = p.`product_code`
+        where 1=1
+        <if test="customerProductCode!=null and customerProductCode!=''">and oi. `customer_product_code` like CONCAT('%',#{customerProductCode},'%')</if>
+        <if test="productCode!=null and productCode!=''">and oi. `product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="status!=null">and oi. `status` =#{status}</if>
+        <if test="startTime!=null and startTime!=''"> and oi.`create_time` >= #{startTime}</if>
+        <if test="endTime!=null and endTime!=''"> and <![CDATA[ oi.`create_time` <= #{endTime} ]]> </if>
+        order by create_time desc
+    </select>
+</mapper>

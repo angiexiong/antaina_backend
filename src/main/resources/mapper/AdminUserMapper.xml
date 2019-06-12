@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.antaina.mapper.AdminUserMapper">
+
+    <sql id="join_query">
+        au.id,
+        au.useraccount,
+        au.username,
+        au.phone,
+        au.status,
+        au.access_permission,
+        au.create_time,
+        au.update_time
+    </sql>
+
+    <select id="listByNotAdminId" resultType="com.antaina.entity.admin.AdminUser">
+        select
+        <include refid="join_query"/>
+        from admin_user au
+        where 1 = 1
+        <if test="startTime != null and startTime!=''"> and <![CDATA[ au.create_time >= #{startTime} ]]></if>
+        <if test="endTime != null and endTime!=''"> and <![CDATA[ au.create_time <= #{endTime} ]]></if>
+    </select>
+
+</mapper>
