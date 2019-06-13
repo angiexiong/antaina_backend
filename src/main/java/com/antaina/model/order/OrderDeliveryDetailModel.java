@@ -8,8 +8,6 @@ import java.math.BigDecimal;
 @Data
 public class OrderDeliveryDetailModel {
 
-    private Long id;
-
     @ApiModelProperty(value = "订单id")
     private Long orderId;
 

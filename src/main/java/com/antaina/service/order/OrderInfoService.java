@@ -3,6 +3,7 @@ package com.antaina.service.order;
 import com.antaina.entity.order.OrderDeliveryDetail;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.MsgResult;
+import com.antaina.enums.common.OrderStatusEnum;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
@@ -43,6 +44,7 @@ public class OrderInfoService {
         orderInfo.setId(UidUtil.getInstance().nextId());
         orderInfo.setDeliveryAmount(BigDecimal.ZERO);
         orderInfo.setRemainingAmount(BigDecimal.ZERO);
+        orderInfo.setStatus(OrderStatusEnum.UNFINISHED.ordinal());
         orderInfo.setCreateTime(new Date());
         orderInfo.setUpdateTime(new Date());
         orderInfoMapper.insert(orderInfo);

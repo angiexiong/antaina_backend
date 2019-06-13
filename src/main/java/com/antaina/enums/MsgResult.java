@@ -124,7 +124,9 @@ public enum MsgResult implements IRet {
 
     ORDER_EXIST_NO(10023, "订单不存在"),
 
-    DELIVERY_EXIST_NO(10024, "出货记录不存在");
+    DELIVERY_EXIST_NO(10024, "出货记录不存在"),
+
+    TOTAL_AMOUNT_ERROR(10025, "总出货量不能大于客户下单量");
 
     private final int code;
 

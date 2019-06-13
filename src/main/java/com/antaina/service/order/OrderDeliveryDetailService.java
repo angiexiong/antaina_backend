@@ -3,6 +3,7 @@ package com.antaina.service.order;
 import com.antaina.entity.order.OrderDeliveryDetail;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.MsgResult;
+import com.antaina.enums.common.OrderStatusEnum;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -39,8 +41,20 @@ public class OrderDeliveryDetailService {
         if (null == orderInfo) {
             throw new BusinessException(MsgResult.ORDER_EXIST_NO);
         }
-        orderInfo.setDeliveryAmount(orderInfo.getDeliveryAmount().add(orderDeliveryDetailModel.getAmount()));
-        orderInfo.setRemainingAmount(orderInfo.getAmount().subtract(orderDeliveryDetailModel.getAmount()));
+
+        // 获取出货表中的所有出货记录
+        BigDecimal totalAmount = orderDeliveryDetailMapper.getTotalAmountByOrderId(orderDeliveryDetailModel.getOrderId());
+        totalAmount = totalAmount == null ? BigDecimal.ZERO : totalAmount;
+
+        orderInfo.setDeliveryAmount(totalAmount.add(orderDeliveryDetailModel.getAmount()));
+        orderInfo.setRemainingAmount(orderInfo.getAmount().subtract(orderInfo.getDeliveryAmount()));
+        if(BigDecimal.ZERO.compareTo(orderInfo.getRemainingAmount()) > 0){
+            throw new BusinessException(MsgResult.TOTAL_AMOUNT_ERROR);
+        }
+
+        if(BigDecimal.ZERO.compareTo(orderInfo.getRemainingAmount()) == 0){
+            orderInfo.setStatus(OrderStatusEnum.FINISHED.ordinal());
+        }
 
         OrderDeliveryDetail odd = new OrderDeliveryDetail();
         BeanUtils.copyProperties(orderDeliveryDetailModel, odd);
@@ -64,6 +78,11 @@ public class OrderDeliveryDetailService {
         }
         orderInfo.setDeliveryAmount(orderInfo.getDeliveryAmount().subtract(odd.getAmount()));
         orderInfo.setRemainingAmount(orderInfo.getRemainingAmount().add(odd.getAmount()));
+
+        if(BigDecimal.ZERO.compareTo(orderInfo.getRemainingAmount()) < 0){
+            orderInfo.setStatus(OrderStatusEnum.UNFINISHED.ordinal());
+        }
+
         orderInfo.setUpdateTime(new Date());
         int affectedRows = orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
         if (1 == affectedRows) {

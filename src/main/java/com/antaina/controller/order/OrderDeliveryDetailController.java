@@ -25,7 +25,7 @@ public class OrderDeliveryDetailController {
     private OrderDeliveryDetailService orderDeliveryDetailService;
 
     @ApiOperation(value="查询订单出货明细")
-    @PostMapping("/getDeliveryListByOrderId")
+    @GetMapping("/getDeliveryListByOrderId")
     public ResponseEntity getDeliveryListByOrderId(Long orderId){
         List<OrderDeliveryDetail> list = orderDeliveryDetailService.getDeliveryListByOrderId(orderId);
         return RespBuilder.build(BaseResult.SUCCESS, list);

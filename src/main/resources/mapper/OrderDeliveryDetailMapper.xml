@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.antaina.mapper.OrderDeliveryDetailMapper">
+    <select id="getTotalAmountByOrderId" resultType="java.math.BigDecimal">
+        select sum(odd.amount)
+        from order_delivery_detail odd
+        where odd.order_id=#{orderId}
+    </select>
 </mapper>
