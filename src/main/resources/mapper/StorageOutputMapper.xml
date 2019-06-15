@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.antaina.mapper.StorageOutputMapper">
+    <select id="getInputListByParams" resultType="com.antaina.model.storage.StorageOutputQueryModel">
+        SELECT so.id,so.`product_code`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`,
+        so.`amount`,so.`type`,so.`create_time`,so.`update_time`
+        FROM `storage_output` so
+        LEFT JOIN `product_info` p ON p.`product_code` = so.`product_code`
+        where 1=1
+        <if test="productCode!=null and productCode!=''">and so.`product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="type!=null">and so.`type` like CONCAT('%',#{type},'%')</if>
+        <if test="startTime!=null and startTime!=''"> and so.`create_time` >= #{startTime}</if>
+        <if test="endTime!=null and endTime!=''"> and <![CDATA[ so.`create_time` <= #{endTime} ]]> </if>
+    </select>
+</mapper>

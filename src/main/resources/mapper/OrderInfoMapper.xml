@@ -13,6 +13,6 @@
         <if test="status!=null">and oi. `status` =#{status}</if>
         <if test="startTime!=null and startTime!=''"> and oi.`create_time` >= #{startTime}</if>
         <if test="endTime!=null and endTime!=''"> and <![CDATA[ oi.`create_time` <= #{endTime} ]]> </if>
-        order by create_time desc
+        order by c.priority desc, oi.create_time desc
     </select>
 </mapper>
