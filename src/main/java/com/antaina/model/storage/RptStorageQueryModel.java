@@ -4,6 +4,8 @@ import com.antaina.entity.storage.RptStorage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class RptStorageQueryModel extends RptStorage {
 
@@ -36,4 +38,10 @@ public class RptStorageQueryModel extends RptStorage {
      */
     @ApiModelProperty(value = "物料单位")
     private Integer productUnit;
+
+    /**
+     * 当前库存
+     */
+    @ApiModelProperty(value = "当前库存")
+    private BigDecimal totalAmount;
 }

@@ -5,6 +5,8 @@ import com.antaina.entity.storage.StorageOutput;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class StorageOutputQueryModel extends StorageOutput {
 
@@ -31,4 +33,10 @@ public class StorageOutputQueryModel extends StorageOutput {
 	 */
 	@ApiModelProperty(value = "物料单位")
 	private Integer productUnit;
+
+	/**
+	 * 当前库存
+	 */
+	@ApiModelProperty(value = "当前库存")
+	private BigDecimal totalAmount;
 }

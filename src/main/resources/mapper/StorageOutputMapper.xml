@@ -3,7 +3,7 @@
 
 <mapper namespace="com.antaina.mapper.StorageOutputMapper">
     <select id="getInputListByParams" resultType="com.antaina.model.storage.StorageOutputQueryModel">
-        SELECT so.id,so.`product_code`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`,
+        SELECT so.id,so.`product_code`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`, p.`total_amount`,
         so.`amount`,so.`type`,so.`create_time`,so.`update_time`
         FROM `storage_output` so
         LEFT JOIN `product_info` p ON p.`product_code` = so.`product_code`

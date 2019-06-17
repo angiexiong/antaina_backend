@@ -71,7 +71,7 @@ public class ProductInfoService {
         ProductInfo pi = new ProductInfo();
         pi.setProductCode(productCode);
         List<ProductInfo> productInfoList = productInfoMapper.select(pi);
-        if(!CollectionUtils.isEmpty(productInfoList)){
+        if(CollectionUtils.isEmpty(productInfoList)){
             return null;
         }
         return productInfoList.get(0);

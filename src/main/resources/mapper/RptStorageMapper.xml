@@ -3,7 +3,7 @@
 
 <mapper namespace="com.antaina.mapper.RptStorageMapper">
     <select id="getListByParams" resultType="com.antaina.model.storage.RptStorageQueryModel">
-        SELECT ci.`name` AS customer_name, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type` AS product_type, rs.*
+        SELECT ci.`name` AS customer_name, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type` AS product_type, pi.`total_amount`,rs.*
         FROM `rpt_storage` rs
         LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
         LEFT JOIN `customer_info` ci ON ci.`id`=rs.`customer_id`
