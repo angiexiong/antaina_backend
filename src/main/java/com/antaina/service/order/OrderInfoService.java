@@ -14,6 +14,7 @@ import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,26 +33,27 @@ public class OrderInfoService {
     @Autowired
     private OrderDeliveryDetailMapper orderDeliveryDetailMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String customerProductCode, String productCode, Integer status, String startTime, String endTime){
+    public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer status, String startTime, String endTime) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(customerProductCode, productCode, status, startTime, endTime);
+        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(productCode, status, startTime, endTime);
         return PageUtil.create(orderInfoList);
     }
 
-    public void add(OrderInfoModel orderInfoModel){
+    public void add(OrderInfoModel orderInfoModel) {
         OrderInfo orderInfo = new OrderInfo();
         BeanUtils.copyProperties(orderInfoModel, orderInfo);
         orderInfo.setId(UidUtil.getInstance().nextId());
         orderInfo.setDeliveryAmount(BigDecimal.ZERO);
         orderInfo.setRemainingAmount(BigDecimal.ZERO);
         orderInfo.setStatus(OrderStatusEnum.UNFINISHED.ordinal());
+        orderInfo.setDeliveryDate(orderInfoModel.getDeliveryDate());
         orderInfo.setCreateTime(new Date());
         orderInfo.setUpdateTime(new Date());
         orderInfoMapper.insert(orderInfo);
     }
 
-    public void update(OrderInfoModel orderInfoModel){
-        if(null == orderInfoModel.getId()){
+    public void update(OrderInfoModel orderInfoModel) {
+        if (null == orderInfoModel.getId()) {
             throw new BusinessException(MsgResult.USER_ID_EMPTY);
         }
         OrderInfo orderInfo = orderInfoMapper.selectByPrimaryKey(orderInfoModel.getId());
@@ -61,10 +63,10 @@ public class OrderInfoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id){
-        if(null != id){
+    public void delete(Long id) {
+        if (null != id) {
             OrderInfo materialInfo = orderInfoMapper.selectByPrimaryKey(id);
-            if(materialInfo != null){
+            if (materialInfo != null) {
                 orderInfoMapper.deleteByPrimaryKey(id);
 
                 OrderDeliveryDetail odd = new OrderDeliveryDetail();

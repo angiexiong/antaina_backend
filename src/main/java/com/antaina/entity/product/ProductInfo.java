@@ -55,6 +55,12 @@ public class ProductInfo {
 	@ApiModelProperty(value = "客户编号")
 	private Long customerId;
 
+	/**
+	 * 客户物料编号
+	 */
+	@ApiModelProperty(value = "客户物料编号")
+	private String customerProductCode;
+
 	private java.util.Date createTime;
 
 	private java.util.Date updateTime;

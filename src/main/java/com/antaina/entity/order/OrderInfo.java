@@ -20,12 +20,6 @@ public class OrderInfo {
 	private Long customerId;
 
 	/**
-	 * 客户物料编号
-	 */
-	@ApiModelProperty(value = "客户物料编号")
-	private String customerProductCode;
-
-	/**
 	 * 订单量
 	 */
 	@ApiModelProperty(value = "订单量")
@@ -45,6 +39,12 @@ public class OrderInfo {
 
 	@ApiModelProperty(value = "状态(0:未全部交货, 1:已完成)")
 	private Integer status;
+
+	/**
+	 * 交货日期
+	 */
+	@ApiModelProperty(value = "交货日期")
+	private String deliveryDate;
 
 	private java.util.Date createTime;
 

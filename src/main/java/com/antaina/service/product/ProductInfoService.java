@@ -25,9 +25,9 @@ public class ProductInfoService {
     @Autowired
     private ProductInfoMapper productInfoMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, String productName, Integer type, Long customerId) {
+    public PageInfo getListWithPage(BaseModel baseModel, String customerProductCode, String productCode, String productName, Integer type, Long customerId) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<ProductInfoQueryModel> materialInfoList = productInfoMapper.getListByParams(productCode, productName, type, customerId);
+        List<ProductInfoQueryModel> materialInfoList = productInfoMapper.getListByParams(customerProductCode, productCode, productName, type, customerId);
         return PageUtil.create(materialInfoList);
     }
 
@@ -67,11 +67,11 @@ public class ProductInfoService {
         return productInfoMapper.selectAll();
     }
 
-    public ProductInfo getProductInfoByCode(String productCode){
+    public ProductInfo getProductInfoByCode(String productCode) {
         ProductInfo pi = new ProductInfo();
         pi.setProductCode(productCode);
         List<ProductInfo> productInfoList = productInfoMapper.select(pi);
-        if(CollectionUtils.isEmpty(productInfoList)){
+        if (CollectionUtils.isEmpty(productInfoList)) {
             return null;
         }
         return productInfoList.get(0);

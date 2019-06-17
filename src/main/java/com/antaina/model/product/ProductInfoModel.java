@@ -52,4 +52,10 @@ public class ProductInfoModel {
 	 */
 	@ApiModelProperty(value = "当前库存")
 	private BigDecimal totalAmount;
+
+	/**
+	 * 客户物料编号
+	 */
+	@ApiModelProperty(value = "客户物料编号")
+	private String customerProductCode;
 }

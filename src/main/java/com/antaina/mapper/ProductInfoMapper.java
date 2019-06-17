@@ -10,5 +10,9 @@ import java.util.List;
 
 @Repository
 public interface ProductInfoMapper extends Mapper<ProductInfo> {
-    List<ProductInfoQueryModel> getListByParams(@Param("productCode") String productCode, @Param("productName") String productName, @Param("type") Integer type, @Param("customerId") Long customerId);
+    List<ProductInfoQueryModel> getListByParams(@Param("customerProductCode") String customerProductCode,
+                                                @Param("productCode") String productCode,
+                                                @Param("productName") String productName,
+                                                @Param("type") Integer type,
+                                                @Param("customerId") Long customerId);
 }
