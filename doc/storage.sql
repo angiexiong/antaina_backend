@@ -124,6 +124,7 @@ CREATE TABLE `product_info` (
   `model` varchar(256) NOT NULL COMMENT '型号',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '物料类型(0:原料; 1:半成品; 2:成品)',
   `product_unit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '计量单位(0:片; 1:个)',
+  `customer_id` bigint(20) DEFAULT NULL COMMENT '客户id，可以为空',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
   PRIMARY KEY (`id`)
@@ -131,27 +132,28 @@ CREATE TABLE `product_info` (
 
 /*Data for the table `product_info` */
 
-insert  into `product_info`(`id`,`product_code`,`product_name`,`model`,`type`,`product_unit`,`create_time`,`update_time`) values (585413003961307136,'C13047100','主机外壳','PS-E109主机外壳  丝印在孔下方',0,0,'2019-06-04 02:22:16.592','2019-06-04 02:22:16.592'),(585413459588550656,'YTZ013272','7.2铜针','挤注无电镀铜针 7.25*2.5mm',0,0,'2019-06-04 02:24:05.222','2019-06-04 02:24:05.222'),(585413918894198784,'P15018100','电源盒','G3电源盒 底壳 PC 白色 佰奥',0,0,'2019-06-04 02:25:54.729','2019-06-04 02:25:54.729'),(585414069155139584,'P15018110','电源盒','G3电源盒 面壳 191*52.5*36.75 PC 白色 佰奥',1,0,'2019-06-04 02:26:30.554','2019-06-12 03:30:06.290');
+insert  into `product_info`(`id`,`product_code`,`product_name`,`model`,`type`,`product_unit`,`customer_id`,`create_time`,`update_time`) values (585413003961307136,'C13047100','主机外壳','PS-E109主机外壳  丝印在孔下方',0,0,585411749436592128,'2019-06-04 02:22:16.592','2019-06-04 02:22:16.592'),(585413459588550656,'YTZ013272','7.2铜针','挤注无电镀铜针 7.25*2.5mm',0,0,585413670566236160,'2019-06-04 02:24:05.222','2019-06-17 03:46:03.212'),(585413918894198784,'P15018100','电源盒','G3电源盒 底壳 PC 白色 佰奥',0,0,585412182536228864,'2019-06-04 02:25:54.729','2019-06-17 03:45:58.409'),(585414069155139584,'P15018110','电源盒','G3电源盒 面壳 191*52.5*36.75 PC 白色 佰奥',1,0,585412113078554624,'2019-06-04 02:26:30.554','2019-06-17 03:45:52.302'),(590143969996967936,'A76554T','测试','测试-测试-测试',1,1,588057211822018560,'2019-06-17 03:41:26.792','2019-06-17 03:45:22.607');
 
 /*Table structure for table `rpt_storage` */
 
 DROP TABLE IF EXISTS `rpt_storage`;
 
 CREATE TABLE `rpt_storage` (
-  `id` bigint(20) NOT NULL,
-  `customer_id` bigint(20) NOT NULL COMMENT '客户编号',
-  `product_code` varchar(64) NOT NULL COMMENT '物料编号',
-  `total_amount` decimal(10,2) NOT NULL COMMENT '历史总库存',
-  `year_amount` decimal(10,2) NOT NULL COMMENT '年度总库存',
-  `year` int(4) NOT NULL COMMENT '年份',
+  `id` bigint(20) unsigned NOT NULL,
+  `product_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '物料编号',
+  `customer_id` bigint(20) DEFAULT NULL COMMENT '客户id，可以为空',
+  `input_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '入库物料总量',
+  `output_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '出库物料总量',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计类型/统计频率(0:每小时, 1:每天, 2:每周,3:每月,4:每年)',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库存表';
+  PRIMARY KEY (`id`),
+  KEY `index_type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='报表: 平台交易数据统计';
 
 /*Data for the table `rpt_storage` */
 
-insert  into `rpt_storage`(`id`,`customer_id`,`product_code`,`total_amount`,`year_amount`,`year`,`create_time`,`update_time`) values (1,585412182536228864,'P15018100','12.00','12.00',2019,'2019-06-14 14:13:02.000','2019-06-14 14:13:04.000');
+insert  into `rpt_storage`(`id`,`product_code`,`customer_id`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'YTZ013272',585413670566236160,'100.00','98.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000'),(1127827688262864896,'P15018100',585412182536228864,'200.00','150.00',0,'2019-06-17 14:47:29.000','2019-06-17 14:47:29.000');
 
 /*Table structure for table `storage_input` */
 
