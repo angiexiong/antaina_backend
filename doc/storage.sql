@@ -98,12 +98,12 @@ DROP TABLE IF EXISTS `order_info`;
 CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL,
   `customer_id` bigint(20) NOT NULL COMMENT '客户编号',
-  `customer_product_code` varchar(64) DEFAULT NULL COMMENT '客户物料编号',
   `product_code` varchar(64) NOT NULL COMMENT '物料编号',
   `amount` decimal(10,2) NOT NULL COMMENT '订单量',
   `delivery_amount` decimal(10,2) NOT NULL COMMENT '已出货量',
   `remaining_amount` decimal(10,2) NOT NULL COMMENT '未出货量',
   `status` tinyint(1) NOT NULL COMMENT '状态(0:未全部交货, 1:已完成)',
+  `delivery_date` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '交货日期',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
   PRIMARY KEY (`id`)
@@ -111,7 +111,7 @@ CREATE TABLE `order_info` (
 
 /*Data for the table `order_info` */
 
-insert  into `order_info`(`id`,`customer_id`,`customer_product_code`,`product_code`,`amount`,`delivery_amount`,`remaining_amount`,`status`,`create_time`,`update_time`) values (588727207615139840,585412113078554624,'B334455','YTZ013272','20000.00','100.00','19900.00',0,'2019-06-13 05:51:44.319','2019-06-15 09:07:10.539'),(588728161651527680,585412182536228864,'A112233','P15018100','800.00','800.00','0.00',1,'2019-06-13 05:55:31.779','2019-06-13 09:47:29.365');
+insert  into `order_info`(`id`,`customer_id`,`product_code`,`amount`,`delivery_amount`,`remaining_amount`,`status`,`delivery_date`,`create_time`,`update_time`) values (588727207615139840,585412113078554624,'YTZ013272','20000.00','100.00','19900.00',0,'2019-07-11','2019-06-13 05:51:44.319','2019-06-17 12:11:27.100'),(588728161651527680,585412182536228864,'P15018100','800.00','800.00','0.00',1,'2019-07-31','2019-06-13 05:55:31.779','2019-06-17 12:09:57.046'),(590271869719023616,590124134537760768,'A76554T','10000.00','0.00','0.00',0,'2019-06-30','2019-06-17 12:09:40.463','2019-06-17 12:09:40.463'),(590272154185109504,588057211822018560,'A76554T','1000.00','0.00','0.00',0,'2019-08-30','2019-06-17 12:10:48.284','2019-06-17 12:11:41.250');
 
 /*Table structure for table `product_info` */
 
@@ -123,7 +123,9 @@ CREATE TABLE `product_info` (
   `product_name` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '物料名称',
   `model` varchar(256) NOT NULL COMMENT '型号',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '物料类型(0:原料; 1:半成品; 2:成品)',
-  `product_unit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '计量单位(0:片; 1:个)',
+  `product_unit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '计量单位(0:片; 1:个, 2: KG)',
+  `customer_product_code` varchar(64) NOT NULL COMMENT '客户物料编号',
+  `total_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '当前库存',
   `customer_id` bigint(20) DEFAULT NULL COMMENT '客户id，可以为空',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
@@ -132,7 +134,7 @@ CREATE TABLE `product_info` (
 
 /*Data for the table `product_info` */
 
-insert  into `product_info`(`id`,`product_code`,`product_name`,`model`,`type`,`product_unit`,`customer_id`,`create_time`,`update_time`) values (585413003961307136,'C13047100','主机外壳','PS-E109主机外壳  丝印在孔下方',0,0,585411749436592128,'2019-06-04 02:22:16.592','2019-06-04 02:22:16.592'),(585413459588550656,'YTZ013272','7.2铜针','挤注无电镀铜针 7.25*2.5mm',0,0,585413670566236160,'2019-06-04 02:24:05.222','2019-06-17 03:46:03.212'),(585413918894198784,'P15018100','电源盒','G3电源盒 底壳 PC 白色 佰奥',0,0,585412182536228864,'2019-06-04 02:25:54.729','2019-06-17 03:45:58.409'),(585414069155139584,'P15018110','电源盒','G3电源盒 面壳 191*52.5*36.75 PC 白色 佰奥',1,0,585412113078554624,'2019-06-04 02:26:30.554','2019-06-17 03:45:52.302'),(590143969996967936,'A76554T','测试','测试-测试-测试',1,1,588057211822018560,'2019-06-17 03:41:26.792','2019-06-17 03:45:22.607');
+insert  into `product_info`(`id`,`product_code`,`product_name`,`model`,`type`,`product_unit`,`customer_product_code`,`total_amount`,`customer_id`,`create_time`,`update_time`) values (585413003961307136,'C13047100','主机外壳','PS-E109主机外壳  丝印在孔下方',0,0,'140.00604A','1.00',585411749436592128,'2019-06-04 02:22:16.592','2019-06-17 11:46:45.213'),(585413459588550656,'YTZ013272','7.2铜针','挤注无电镀铜针 7.25*2.5mm',0,0,'725250320','0.00',585413670566236160,'2019-06-04 02:24:05.222','2019-06-17 11:46:30.625'),(585413918894198784,'P15018100','电源盒','G3电源盒 底壳 PC 白色 佰奥',0,0,'P17010000','0.00',585412182536228864,'2019-06-04 02:25:54.729','2019-06-17 11:46:13.505'),(585414069155139584,'P15018110','电源盒','G3电源盒 面壳 191*52.5*36.75 PC 白色 佰奥',1,0,'P15018100','0.00',585412113078554624,'2019-06-04 02:26:30.554','2019-06-17 11:46:05.464'),(590143969996967936,'A76554T','测试','测试-测试-测试',1,1,'client-001','100.00',588057211822018560,'2019-06-17 03:41:26.792','2019-06-17 11:45:38.568'),(590228410702368768,'YPC012520','2520','\"LN-2520ZH PC 米白色 帝人\"',0,2,'LN-2520ZH CM10558ZH','0.00',585412113078554624,'2019-06-17 09:16:59.025','2019-06-17 11:45:21.083');
 
 /*Table structure for table `rpt_storage` */
 
@@ -153,7 +155,7 @@ CREATE TABLE `rpt_storage` (
 
 /*Data for the table `rpt_storage` */
 
-insert  into `rpt_storage`(`id`,`product_code`,`customer_id`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'YTZ013272',585413670566236160,'100.00','98.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000'),(1127827688262864896,'P15018100',585412182536228864,'200.00','150.00',0,'2019-06-17 14:47:29.000','2019-06-17 14:47:29.000');
+insert  into `rpt_storage`(`id`,`product_code`,`customer_id`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'A76554T',585413670566236160,'100.00','0.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000');
 
 /*Table structure for table `storage_input` */
 
@@ -171,7 +173,7 @@ CREATE TABLE `storage_input` (
 
 /*Data for the table `storage_input` */
 
-insert  into `storage_input`(`id`,`product_code`,`amount`,`type`,`create_time`,`update_time`) values (589485619240112127,'C13047100','100.00',0,'2019-06-15 10:53:40','2019-06-15 10:53:42'),(589485619240112128,'YTZ013272','6.00',1,'2019-06-15 08:05:24','2019-06-15 08:05:24'),(589486277355769856,'P15018100','1000.00',2,'2019-06-15 08:08:01','2019-06-15 08:08:01'),(590124627473338368,'P15018110','100.00',1,'2019-06-17 02:24:35','2019-06-17 02:24:35');
+insert  into `storage_input`(`id`,`product_code`,`amount`,`type`,`create_time`,`update_time`) values (590235593632518144,'A76554T','100.00',0,'2019-06-17 09:45:32','2019-06-17 09:45:32'),(590254138827345920,'C13047100','1.00',1,'2019-06-17 10:59:13','2019-06-17 10:59:13');
 
 /*Table structure for table `storage_output` */
 
@@ -188,8 +190,6 @@ CREATE TABLE `storage_output` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `storage_output` */
-
-insert  into `storage_output`(`id`,`product_code`,`amount`,`type`,`create_time`,`update_time`) values (589489544219463680,'YTZ013272','4.00',0,'2019-06-15 08:20:59.528','2019-06-15 08:20:59.528'),(589489988387868672,'C13047100','1000.00',1,'2019-06-15 08:22:45.426','2019-06-15 08:22:45.426'),(589490057157677056,'P15018100','155.00',2,'2019-06-15 08:23:01.822','2019-06-15 08:23:01.822');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
