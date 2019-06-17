@@ -1,6 +1,5 @@
 package com.antaina.controller.order;
 
-import com.antaina.entity.customer.CustomerInfo;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;

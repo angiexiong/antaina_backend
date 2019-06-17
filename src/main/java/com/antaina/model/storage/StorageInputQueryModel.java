@@ -5,8 +5,6 @@ import com.antaina.entity.storage.StorageInput;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Id;
-
 @Data
 public class StorageInputQueryModel extends StorageInput {
 
@@ -33,4 +31,10 @@ public class StorageInputQueryModel extends StorageInput {
 	 */
 	@ApiModelProperty(value = "物料单位")
 	private Integer productUnit;
+
+	/**
+	 * 客户名称
+	 */
+	@ApiModelProperty(value = "客户名称")
+	private String customerName;
 }

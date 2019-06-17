@@ -4,8 +4,6 @@ package com.antaina.model.storage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.persistence.Id;
-
 @Data
 public class StorageInputModel {
 

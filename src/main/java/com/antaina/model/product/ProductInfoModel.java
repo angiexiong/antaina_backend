@@ -39,5 +39,9 @@ public class ProductInfoModel {
 	@ApiModelProperty(value = "物料类型(0:原料; 1:半成品; 2:成品)")
 	private Integer type;
 
-
+	/**
+	 * 客户编号
+	 */
+	@ApiModelProperty(value = "客户编号")
+	private Long customerId;
 }

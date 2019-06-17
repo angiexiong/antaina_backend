@@ -2,7 +2,6 @@ package com.antaina.controller.storage;
 
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
-import com.antaina.model.storage.StorageInfoModel;
 import com.antaina.model.storage.StorageInputModel;
 import com.antaina.resp.RespBuilder;
 import com.antaina.service.storage.StorageInputService;

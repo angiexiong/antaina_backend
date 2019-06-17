@@ -1,7 +1,6 @@
 package com.antaina.model.storage;
 
 
-import com.antaina.entity.storage.StorageInput;
 import com.antaina.entity.storage.StorageOutput;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

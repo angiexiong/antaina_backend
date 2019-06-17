@@ -6,6 +6,7 @@ import com.antaina.exception.BusinessException;
 import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.model.BaseModel;
 import com.antaina.model.product.ProductInfoModel;
+import com.antaina.model.product.ProductInfoQueryModel;
 import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
@@ -23,9 +24,9 @@ public class ProductInfoService {
     @Autowired
     private ProductInfoMapper productInfoMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, String productName, Integer type) {
+    public PageInfo getListWithPage(BaseModel baseModel, String productCode, String productName, Integer type, Long customerId) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<ProductInfo> materialInfoList = productInfoMapper.getListByParams(productCode, productName, type);
+        List<ProductInfoQueryModel> materialInfoList = productInfoMapper.getListByParams(productCode, productName, type, customerId);
         return PageUtil.create(materialInfoList);
     }
 
@@ -40,7 +41,7 @@ public class ProductInfoService {
 
     public void update(ProductInfoModel productInfoModel) {
         if (null == productInfoModel.getId()) {
-            throw new BusinessException(MsgResult.USER_ID_EMPTY);
+            throw new BusinessException(MsgResult.PRODUCT_ID_EMPTY);
         }
         ProductInfo materialInfo = productInfoMapper.selectByPrimaryKey(productInfoModel.getId());
         BeanUtils.copyProperties(productInfoModel, materialInfo);

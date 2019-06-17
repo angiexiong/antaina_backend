@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.antaina.mapper.RptStorageMapper">
+    <select id="getListByParams" resultType="com.antaina.model.storage.RptStorageQueryModel">
+        SELECT ci.`name` AS customer_name, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type` AS product_type, rs.*
+        FROM `rpt_storage` rs
+        LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
+        LEFT JOIN `customer_info` ci ON ci.`id`=rs.`customer_id`
+        where 1=1
+        <if test="type!=null">and rs. `type` =#{type}</if>
+        <if test="productCode!=null and productCode!=''">and pi. `product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="startTime!=null and startTime!=''"> and rs.`create_time` >= #{startTime}</if>
+        <if test="endTime!=null and endTime!=''"> and <![CDATA[ rs.`create_time` <= #{endTime} ]]> </if>
+    </select>
+</mapper>

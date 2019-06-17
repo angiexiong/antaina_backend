@@ -28,8 +28,8 @@ public class ProductInfoController {
 
     @ApiOperation(value = "查询")
     @GetMapping("/getListWithPage")
-    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, String productName, Integer type){
-        PageInfo page = productInfoService.getListWithPage(baseModel, productCode, productName, type);
+    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, String productName, Integer type, Long customerId){
+        PageInfo page = productInfoService.getListWithPage(baseModel, productCode, productName, type, customerId);
         return RespBuilder.build(BaseResult.SUCCESS, page);
     }
 

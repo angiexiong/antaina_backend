@@ -9,7 +9,7 @@
         LEFT JOIN `product_info` p ON p.`product_code` = so.`product_code`
         where 1=1
         <if test="productCode!=null and productCode!=''">and so.`product_code` like CONCAT('%',#{productCode},'%')</if>
-        <if test="type!=null">and so.`type` like CONCAT('%',#{type},'%')</if>
+        <if test="type!=null">and so.`type`=#{type}</if>
         <if test="startTime!=null and startTime!=''"> and so.`create_time` >= #{startTime}</if>
         <if test="endTime!=null and endTime!=''"> and <![CDATA[ so.`create_time` <= #{endTime} ]]> </if>
     </select>

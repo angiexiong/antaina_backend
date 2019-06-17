@@ -1,7 +1,6 @@
 package com.antaina.mapper;
 
 import com.antaina.entity.storage.StorageOutput;
-import com.antaina.model.storage.StorageInputQueryModel;
 import com.antaina.model.storage.StorageOutputQueryModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
