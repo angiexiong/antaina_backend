@@ -4,6 +4,8 @@ package com.antaina.model.product;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ProductInfoModel {
 
@@ -44,4 +46,10 @@ public class ProductInfoModel {
 	 */
 	@ApiModelProperty(value = "客户编号")
 	private Long customerId;
+
+	/**
+	 * 当前库存
+	 */
+	@ApiModelProperty(value = "当前库存")
+	private BigDecimal totalAmount;
 }

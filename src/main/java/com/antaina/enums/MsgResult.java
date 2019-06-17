@@ -128,7 +128,9 @@ public enum MsgResult implements IRet {
 
     TOTAL_AMOUNT_ERROR(10025, "总出货量不能大于客户下单量"),
 
-    PRODUCT_ID_EMPTY(10026, "产品id不能为空");
+    PRODUCT_ID_EMPTY(10026, "产品id不能为空"),
+
+    PRODUCT_INFO_EXIST_NO(10027, "物料信息不存在");
 
     private final int code;
 

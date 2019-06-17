@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -64,5 +65,15 @@ public class ProductInfoService {
 
     public List<ProductInfo> getProductList() {
         return productInfoMapper.selectAll();
+    }
+
+    public ProductInfo getProductInfoByCode(String productCode){
+        ProductInfo pi = new ProductInfo();
+        pi.setProductCode(productCode);
+        List<ProductInfo> productInfoList = productInfoMapper.select(pi);
+        if(!CollectionUtils.isEmpty(productInfoList)){
+            return null;
+        }
+        return productInfoList.get(0);
     }
 }

@@ -7,6 +7,7 @@
         si.`amount`,si.`type`,si.`create_time`,si.`update_time`, ci.`name` AS customer_id
         FROM `storage_input` si
         LEFT JOIN `product_info` p ON p.`product_code` = si.`product_code`
+        LEFT JOIN `customer_info` ci ON p.`customer_id` = ci.`id`
         where 1=1
         <if test="productCode!=null and productCode!=''">and si.`product_code` like CONCAT('%',#{productCode},'%')</if>
         <if test="type!=null">and si.`type`=#{type}</if>

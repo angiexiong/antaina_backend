@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 @Data
 public class ProductInfo {
@@ -41,6 +42,12 @@ public class ProductInfo {
 	 */
 	@ApiModelProperty(value = "物料类型(0:原料; 1:半成品; 2:成品)")
 	private Integer type;
+
+	/**
+	 * 当前库存
+	 */
+	@ApiModelProperty(value = "当前库存")
+	private BigDecimal totalAmount;
 
 	/**
 	 * 客户编号

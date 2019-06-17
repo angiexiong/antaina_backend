@@ -1,12 +1,15 @@
 package com.antaina.service.storage;
 
+import com.antaina.entity.product.ProductInfo;
 import com.antaina.entity.storage.StorageOutput;
 import com.antaina.enums.MsgResult;
 import com.antaina.exception.BusinessException;
+import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.mapper.StorageOutputMapper;
 import com.antaina.model.BaseModel;
 import com.antaina.model.storage.StorageOutputModel;
 import com.antaina.model.storage.StorageOutputQueryModel;
+import com.antaina.service.product.ProductInfoService;
 import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +17,8 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -22,7 +27,13 @@ import java.util.List;
 public class StorageOutputService {
 
     @Autowired
+    private ProductInfoService productInfoService;
+
+    @Autowired
     private StorageOutputMapper storageOutputMapper;
+
+    @Autowired
+    private ProductInfoMapper productInfoMapper;
 
     public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer type, String startTime, String endTime){
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
@@ -30,7 +41,17 @@ public class StorageOutputService {
         return PageUtil.create(storageOutputList);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void add(StorageOutputModel storageOutputModel){
+
+        ProductInfo productInfo = productInfoService.getProductInfoByCode(storageOutputModel.getProductCode());
+        if(null == productInfo){
+            throw new BusinessException(MsgResult.PRODUCT_INFO_EXIST_NO);
+        }
+        productInfo.setTotalAmount(productInfo.getTotalAmount().subtract(storageOutputModel.getAmount()));
+        productInfo.setUpdateTime(new Date());
+        productInfoMapper.updateByPrimaryKey(productInfo);
+
         StorageOutput storageOutput = new StorageOutput();
         BeanUtils.copyProperties(storageOutputModel, storageOutput);
         storageOutput.setId(UidUtil.getInstance().nextId());
@@ -49,10 +70,18 @@ public class StorageOutputService {
         storageOutputMapper.updateByPrimaryKeySelective(storageOutput);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id){
         if(null != id){
             StorageOutput storageOutput = storageOutputMapper.selectByPrimaryKey(id);
             if(storageOutput != null){
+                ProductInfo productInfo = productInfoService.getProductInfoByCode(storageOutput.getProductCode());
+                if(null == productInfo){
+                    throw new BusinessException(MsgResult.PRODUCT_INFO_EXIST_NO);
+                }
+                productInfo.setTotalAmount(productInfo.getTotalAmount().add(storageOutput.getAmount()));
+                productInfo.setUpdateTime(new Date());
+                productInfoMapper.updateByPrimaryKey(productInfo);
                 storageOutputMapper.deleteByPrimaryKey(id);
             }
         }
