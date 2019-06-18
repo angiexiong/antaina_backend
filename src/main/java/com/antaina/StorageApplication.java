@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import tk.mybatis.spring.annotation.MapperScan;
 
-//@EnableScheduling
+@EnableScheduling
 @MapperScan(basePackages = "com.antaina.mapper")
 @SpringBootApplication
 public class StorageApplication {

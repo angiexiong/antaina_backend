@@ -123,7 +123,7 @@ public class RptStorageSchedule {
     @Scheduled(cron = "10 0 0 * * ?")
     public void doStatisticsByDay() {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_HOUR, -1, TIME_UNIT_HOUR);
-        Map<String, List<RptStorage>> rptStorageMap = null;
+        Map<String, List<RptStorage>> rptStorageMap = new HashMap<>(16);
         if (!CollectionUtils.isEmpty(rptStorageList)) {
             rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getProductCode));
         }
@@ -168,9 +168,9 @@ public class RptStorageSchedule {
      * 每年统计一次
      *
      * @Scheduled(cron = "25 0 0 1 * ?")
-     * @Scheduled(cron = "0 0 0 1 1 *)
+     * @Scheduled(cron = "30 0 0 1 1 *")
      */
-    @Scheduled(cron = "30 0 0 1 1 *")
+    @Scheduled(cron = "25 0 0 1 * ?")
     public void doStatisticsByYear() {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_MONTH, -12, TIME_UNIT_MONTH);
         Map<String, List<RptStorage>> rptStorageMap = null;
