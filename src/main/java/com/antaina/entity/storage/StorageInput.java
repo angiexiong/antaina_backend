@@ -30,6 +30,12 @@ public class StorageInput {
 	@ApiModelProperty(value = "入库类型(0:采购入库, 1:生产入库, 2:退货入库)")
 	private Integer type;
 
+	/**
+	 * 统计状态(0:未统计, 1:已统计)
+	 */
+	@ApiModelProperty(value = "统计状态(0:未统计, 1:已统计)")
+	private Integer statisticFlag;
+
 	private java.util.Date createTime;
 
 	private java.util.Date updateTime;

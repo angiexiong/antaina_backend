@@ -1,6 +1,7 @@
 package com.antaina.mapper;
 
 import com.antaina.entity.storage.StorageInput;
+import com.antaina.model.storage.StorageInputOutputQueryModel;
 import com.antaina.model.storage.StorageInputQueryModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -14,4 +15,8 @@ public interface StorageInputMapper extends Mapper<StorageInput> {
                                                       @Param("type") Integer type,
                                                       @Param("startTime") String startTime,
                                                       @Param("endTime") String endTime);
+
+    List<StorageInputOutputQueryModel> getListByStatisticFlag();
+
+    int batchUpdateStatisticFlag(@Param("ids") List<Long> ids);
 }

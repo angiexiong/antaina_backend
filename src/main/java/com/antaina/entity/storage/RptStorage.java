@@ -19,12 +19,6 @@ public class RptStorage {
 	private String productCode;
 
 	/**
-	 * 客户编号
-	 */
-	@ApiModelProperty(value = "客户编号")
-	private Long customerId;
-
-	/**
 	 * 入库物料总量
 	 */
 	@ApiModelProperty(value = "入库物料总量")

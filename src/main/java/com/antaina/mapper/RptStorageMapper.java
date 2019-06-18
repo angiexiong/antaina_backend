@@ -11,4 +11,8 @@ import java.util.List;
 @Repository
 public interface RptStorageMapper extends Mapper<RptStorage> {
     List<RptStorageQueryModel> getListByParams(@Param("productCode") String productCode, @Param("type") Integer type, @Param("startTime")String startTime, @Param("endTime")String endTime);
+
+    int batchInsert(@Param("list") List<RptStorage> rptUserList);
+
+    List<RptStorage> getListByTimeInterval(@Param("frequencyType") Integer type, @Param("timeInterval")Integer timeInterval, @Param("timeUnit")String timeUnit);
 }
