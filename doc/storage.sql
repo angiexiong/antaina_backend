@@ -143,7 +143,6 @@ DROP TABLE IF EXISTS `rpt_storage`;
 CREATE TABLE `rpt_storage` (
   `id` bigint(20) unsigned NOT NULL,
   `product_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '物料编号',
-  `customer_id` bigint(20) DEFAULT NULL COMMENT '客户id，可以为空',
   `input_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '入库物料总量',
   `output_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '出库物料总量',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计类型/统计频率(0:每小时, 1:每天, 2:每周,3:每月,4:每年)',
@@ -155,7 +154,7 @@ CREATE TABLE `rpt_storage` (
 
 /*Data for the table `rpt_storage` */
 
-insert  into `rpt_storage`(`id`,`product_code`,`customer_id`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'A76554T',585413670566236160,'100.00','0.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000');
+insert  into `rpt_storage`(`id`,`product_code`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'A76554T','100.00','0.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000');
 
 /*Table structure for table `storage_input` */
 
@@ -166,6 +165,7 @@ CREATE TABLE `storage_input` (
   `product_code` varchar(64) NOT NULL COMMENT '物料编号',
   `amount` decimal(10,2) NOT NULL COMMENT '入库量',
   `type` tinyint(1) NOT NULL COMMENT '入库类型(0:采购入库, 1:生产入库, 2:退货入库)',
+  `statistic_flag` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计状态(0:未统计, 1:已统计)',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -173,7 +173,7 @@ CREATE TABLE `storage_input` (
 
 /*Data for the table `storage_input` */
 
-insert  into `storage_input`(`id`,`product_code`,`amount`,`type`,`create_time`,`update_time`) values (590235593632518144,'A76554T','100.00',0,'2019-06-17 09:45:32','2019-06-17 09:45:32'),(590254138827345920,'C13047100','1.00',1,'2019-06-17 10:59:13','2019-06-17 10:59:13');
+insert  into `storage_input`(`id`,`product_code`,`amount`,`type`,`statistic_flag`,`create_time`,`update_time`) values (590235593632518144,'A76554T','100.00',0,1,'2019-06-17 09:45:32','2019-06-18 15:06:43'),(590254138827345920,'C13047100','1.00',1,0,'2019-06-17 10:59:13','2019-06-17 10:59:13');
 
 /*Table structure for table `storage_output` */
 
@@ -184,6 +184,7 @@ CREATE TABLE `storage_output` (
   `product_code` varchar(64) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `type` tinyint(1) NOT NULL COMMENT '出库类型(0:生产出库, 1:销售出库, 2:退货出库)',
+  `statistic_flag` tinyint(1) NOT NULL COMMENT '统计状态(0:未统计, 1:已统计)',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
   PRIMARY KEY (`id`)
