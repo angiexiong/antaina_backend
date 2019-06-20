@@ -9,6 +9,7 @@ import com.antaina.mapper.StorageOutputMapper;
 import com.antaina.model.storage.StorageInputOutputQueryModel;
 import com.antaina.util.UidUtil;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.core.SchedulerLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,8 @@ public class RptStorageSchedule {
     private static final int FREQUENCY_TYPE_MONTH = 3;
     private static final int FREQUENCY_TYPE_YEAR = 4;
 
+    private static final long LOCK_DURATION = 59 * 60 * 1000L;
+
     @Autowired
     private StorageInputMapper storageInputMapper;
 
@@ -49,8 +52,11 @@ public class RptStorageSchedule {
      *
      * @Scheduled(cron = "03 0 0/1  * * ?")
      * @Scheduled(cron = "0 0/1 *  * * ?")
+     * , lockAtMostFor = FOURTEEN_MIN, lockAtLeastFor = FOURTEEN_MIN
+     * 60*60*1000
      */
     @Scheduled(cron = "03 0 0/1  * * ?")
+    @SchedulerLock(name = "doStatisticsByHour", lockAtMostFor = LOCK_DURATION, lockAtLeastFor = LOCK_DURATION)
     public void doStatisticsByHour() {
         // 获取所有物料信息
         List<ProductInfo> productInfoList = productInfoMapper.selectAll();
@@ -121,6 +127,7 @@ public class RptStorageSchedule {
      * @Scheduled(cron = "0 0/3 *  * * ?")
      */
     @Scheduled(cron = "10 0 0 * * ?")
+    @SchedulerLock(name = "doStatisticsByDay", lockAtMostFor = LOCK_DURATION, lockAtLeastFor = LOCK_DURATION)
     public void doStatisticsByDay() {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_HOUR, -1, TIME_UNIT_HOUR);
         Map<String, List<RptStorage>> rptStorageMap = new HashMap<>(16);
@@ -137,6 +144,7 @@ public class RptStorageSchedule {
      * @Scheduled(cron = "0 0/4 *  * * ?")
      */
     @Scheduled(cron = "15 0 0 0/7 * ?")
+    @SchedulerLock(name = "doStatisticsByWeek", lockAtMostFor = LOCK_DURATION, lockAtLeastFor = LOCK_DURATION)
     public void doStatisticsByWeek() {
 
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_DAY, -7, TIME_UNIT_DAY);
@@ -154,6 +162,7 @@ public class RptStorageSchedule {
      * @Scheduled(cron = "0 0/5 *  * * ?")
      */
     @Scheduled(cron = "20 0 0 1 * ?")
+    @SchedulerLock(name = "doStatisticsByMonth", lockAtMostFor = LOCK_DURATION, lockAtLeastFor = LOCK_DURATION)
     public void doStatisticsByMonth() {
 
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_DAY, -1, TIME_UNIT_MONTH);
@@ -171,6 +180,7 @@ public class RptStorageSchedule {
      * @Scheduled(cron = "30 0 0 1 1 *")
      */
     @Scheduled(cron = "25 0 0 1 * ?")
+    @SchedulerLock(name = "doStatisticsByYear", lockAtMostFor = LOCK_DURATION, lockAtLeastFor = LOCK_DURATION)
     public void doStatisticsByYear() {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_MONTH, -12, TIME_UNIT_MONTH);
         Map<String, List<RptStorage>> rptStorageMap = null;

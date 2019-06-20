@@ -13,7 +13,7 @@
 
     <select id="getListByParams" resultType="com.antaina.model.storage.RptStorageQueryModel">
         SELECT ci.`name` AS customer_name, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type`
-        AS product_type, pi.`total_amount`,rs.*
+        AS product_type, pi.`total_amount`,rs.`id`,rs.`product_code`,rs.`input_amount`,rs.`output_amount`,rs.`type`,rs.`create_time`,rs.`update_time`
         FROM `rpt_storage` rs
         LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
         LEFT JOIN `customer_info` ci ON ci.`id`= pi.`customer_id`
