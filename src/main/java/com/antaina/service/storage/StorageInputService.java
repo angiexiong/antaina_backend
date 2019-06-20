@@ -56,6 +56,7 @@ public class StorageInputService {
         StorageInput storageInput = new StorageInput();
         BeanUtils.copyProperties(storageInputModel, storageInput);
         storageInput.setId(UidUtil.getInstance().nextId());
+        storageInput.setStatisticFlag(0);
         storageInput.setCreateTime(new Date());
         storageInput.setUpdateTime(new Date());
         storageInputMapper.insert(storageInput);

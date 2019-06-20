@@ -55,6 +55,7 @@ public class StorageOutputService {
         StorageOutput storageOutput = new StorageOutput();
         BeanUtils.copyProperties(storageOutputModel, storageOutput);
         storageOutput.setId(UidUtil.getInstance().nextId());
+        storageOutput.setStatisticFlag(0);
         storageOutput.setCreateTime(new Date());
         storageOutput.setUpdateTime(new Date());
         storageOutputMapper.insert(storageOutput);
