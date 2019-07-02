@@ -8,6 +8,7 @@
         LEFT JOIN `customer_info` c ON oi.`customer_id` = c.`id`
         LEFT JOIN `product_info` p ON oi.`product_code` = p.`product_code`
         where 1=1
+        <if test="orderNo!=null and orderNo!=''"> and oi. `order_no` like CONCAT('%',#{orderNo},'%')</if>
         <if test="productCode!=null and productCode!=''"> and oi. `product_code` like CONCAT('%',#{productCode},'%')</if>
         <if test="status!=null"> and oi. `status` =#{status}</if>
         <if test="startTime!=null and startTime!=''"> and oi.`create_time` >= #{startTime}</if>
