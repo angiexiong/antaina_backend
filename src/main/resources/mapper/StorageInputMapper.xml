@@ -16,7 +16,7 @@
     </update>
 
     <select id="getInputListByParams" resultType="com.antaina.model.storage.StorageInputQueryModel">
-        SELECT si.id,si.`product_code`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`, p.`total_amount`,
+        SELECT si.id,si.`product_code`,si.`order_no`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`, p.`total_amount`,
         si.`amount`,si.`type`,si.`create_time`,si.`update_time`, ci.`name` AS customer_id
         FROM `storage_input` si
         LEFT JOIN `product_info` p ON p.`product_code` = si.`product_code`
