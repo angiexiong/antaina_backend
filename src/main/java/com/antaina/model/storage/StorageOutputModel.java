@@ -10,6 +10,12 @@ public class StorageOutputModel {
 	private Long id;
 
 	/**
+	 * 订单编号
+	 */
+	@ApiModelProperty(value = "订单编号")
+	private String orderNo;
+
+	/**
 	 * 物料编号
 	 */
 	@ApiModelProperty(value = "物料编号")
