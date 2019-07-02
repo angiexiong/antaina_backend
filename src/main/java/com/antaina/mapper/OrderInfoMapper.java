@@ -11,7 +11,8 @@ import java.util.List;
 @Repository
 public interface OrderInfoMapper extends Mapper<OrderInfo> {
 
-    List<OrderInfoQueryModel> getOrderListByParams(@Param("productCode") String productCode,
+    List<OrderInfoQueryModel> getOrderListByParams(@Param("orderNo") String orderNo,
+                                                   @Param("productCode") String productCode,
                                                    @Param("status") Integer status,
                                                    @Param("startTime") String startTime,
                                                    @Param("endTime") String endTime);

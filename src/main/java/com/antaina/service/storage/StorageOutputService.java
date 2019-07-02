@@ -1,6 +1,7 @@
 package com.antaina.service.storage;
 
 import com.antaina.entity.product.ProductInfo;
+import com.antaina.entity.storage.StorageInput;
 import com.antaina.entity.storage.StorageOutput;
 import com.antaina.enums.MsgResult;
 import com.antaina.exception.BusinessException;
@@ -86,5 +87,16 @@ public class StorageOutputService {
                 storageOutputMapper.deleteByPrimaryKey(id);
             }
         }
+    }
+
+    /**
+     * 本接口仅供删除物料信息时删除进出库时使用
+     * @param productCode
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByProductCode(String productCode){
+        StorageOutput condition = new StorageOutput();
+        condition.setProductCode(productCode);
+        storageOutputMapper.delete(condition);
     }
 }

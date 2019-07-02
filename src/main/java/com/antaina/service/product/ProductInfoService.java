@@ -1,12 +1,17 @@
 package com.antaina.service.product;
 
 import com.antaina.entity.product.ProductInfo;
+import com.antaina.entity.storage.RptStorage;
 import com.antaina.enums.MsgResult;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.ProductInfoMapper;
+import com.antaina.mapper.RptStorageMapper;
 import com.antaina.model.BaseModel;
 import com.antaina.model.product.ProductInfoModel;
 import com.antaina.model.product.ProductInfoQueryModel;
+import com.antaina.service.order.OrderInfoService;
+import com.antaina.service.storage.StorageInputService;
+import com.antaina.service.storage.StorageOutputService;
 import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
@@ -23,7 +28,19 @@ import java.util.List;
 public class ProductInfoService {
 
     @Autowired
+    private OrderInfoService orderInfoService;
+
+    @Autowired
+    private StorageInputService storageInputService;
+
+    @Autowired
+    private StorageOutputService storageOutputService;
+
+    @Autowired
     private ProductInfoMapper productInfoMapper;
+
+    @Autowired
+    private RptStorageMapper rptStorageMapper;
 
     public PageInfo getListWithPage(BaseModel baseModel, String customerProductCode, String productCode, String productName, Integer type, Long customerId) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
@@ -52,8 +69,20 @@ public class ProductInfoService {
 
     public void delete(Long id) {
         if (null != id) {
-            ProductInfo materialInfo = productInfoMapper.selectByPrimaryKey(id);
-            if (materialInfo != null) {
+            ProductInfo productInfo = productInfoMapper.selectByPrimaryKey(id);
+            if (productInfo != null) {
+                String productCode = productInfo.getProductCode();
+
+                // 级联删除其他表与本物料相关的记录，物理删除
+                // 暂时需要删除记录的表：order_info + order_delivery_detail，storage_input，storage_output，rpt_storage
+                orderInfoService.deleteByProductCode(productCode);
+                storageInputService.deleteByProductCode(productCode);
+                storageOutputService.deleteByProductCode(productCode);
+
+                RptStorage condition = new RptStorage();
+                condition.setProductCode(productCode);
+                rptStorageMapper.delete(condition);
+
                 productInfoMapper.deleteByPrimaryKey(id);
             }
         }

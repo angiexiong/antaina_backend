@@ -14,11 +14,12 @@ import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.time.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -33,9 +34,9 @@ public class OrderInfoService {
     @Autowired
     private OrderDeliveryDetailMapper orderDeliveryDetailMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer status, String startTime, String endTime) {
+    public PageInfo getListWithPage(BaseModel baseModel, String orderNo, String productCode, Integer status, String startTime, String endTime) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(productCode, status, startTime, endTime);
+        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(orderNo, productCode, status, startTime, endTime);
         return PageUtil.create(orderInfoList);
     }
 
@@ -78,5 +79,19 @@ public class OrderInfoService {
 
     public OrderInfo getById(Long id) {
         return orderInfoMapper.selectByPrimaryKey(id);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByProductCode(String productCode) {
+        if (StringUtils.isNotBlank(productCode)) {
+            OrderInfo condition = new OrderInfo();
+            condition.setProductCode(productCode);
+            List<OrderInfo> orderInfoList = orderInfoMapper.select(condition);
+            if (!CollectionUtils.isEmpty(orderInfoList)) {
+                orderInfoList.forEach(e -> {
+                    delete(e.getId());
+                });
+            }
+        }
     }
 }

@@ -26,8 +26,8 @@ public class OrderController {
 
     @ApiOperation(value = "查询")
     @GetMapping("/getListWithPage")
-    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, Integer status, String startTime, String endTime) {
-        PageInfo page = orderInfoService.getListWithPage(baseModel, productCode, status, startTime, endTime);
+    public ResponseEntity getListWithPage(BaseModel baseModel, String orderNo, String productCode, Integer status, String startTime, String endTime) {
+        PageInfo page = orderInfoService.getListWithPage(baseModel, orderNo, productCode, status, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, page);
     }
 

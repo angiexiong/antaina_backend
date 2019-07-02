@@ -88,4 +88,15 @@ public class StorageInputService {
             }
         }
     }
+
+    /**
+     * 本接口仅供删除物料信息时删除进出库时使用
+     * @param productCode
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByProductCode(String productCode){
+        StorageInput condition = new StorageInput();
+        condition.setProductCode(productCode);
+        storageInputMapper.delete(condition);
+    }
 }
