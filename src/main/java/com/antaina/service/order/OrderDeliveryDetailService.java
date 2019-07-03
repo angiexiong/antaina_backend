@@ -4,10 +4,13 @@ import com.antaina.entity.order.OrderDeliveryDetail;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.MsgResult;
 import com.antaina.enums.common.OrderStatusEnum;
+import com.antaina.enums.common.StorageOutputTypeEnum;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
 import com.antaina.model.order.OrderDeliveryDetailModel;
+import com.antaina.model.storage.StorageOutputModel;
+import com.antaina.service.storage.StorageOutputService;
 import com.antaina.util.UidUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +25,9 @@ import java.util.List;
 @Slf4j
 @Service
 public class OrderDeliveryDetailService {
+
+    @Autowired
+    private StorageOutputService storageOutputService;
 
     @Autowired
     private OrderDeliveryDetailMapper orderDeliveryDetailMapper;
@@ -64,6 +70,14 @@ public class OrderDeliveryDetailService {
 
         orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
         orderDeliveryDetailMapper.insert(odd);
+
+        // 增加出库记录
+        StorageOutputModel som = new StorageOutputModel();
+        som.setOrderNo(orderInfo.getOrderNo());
+        som.setProductCode(orderInfo.getProductCode());
+        som.setAmount(orderDeliveryDetailModel.getAmount());
+        som.setType(StorageOutputTypeEnum.PRODUCTION.ordinal());
+        storageOutputService.add(som);
     }
 
     @Transactional(rollbackFor = Exception.class)
