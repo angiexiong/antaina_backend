@@ -1,10 +1,12 @@
 package com.antaina.service.storage;
 
+import com.antaina.entity.order.OrderInfo;
 import com.antaina.entity.product.ProductInfo;
 import com.antaina.entity.storage.StorageInput;
 import com.antaina.entity.storage.StorageOutput;
 import com.antaina.enums.MsgResult;
 import com.antaina.exception.BusinessException;
+import com.antaina.mapper.OrderInfoMapper;
 import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.mapper.StorageOutputMapper;
 import com.antaina.model.BaseModel;
@@ -15,6 +17,7 @@ import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,9 @@ public class StorageOutputService {
     @Autowired
     private ProductInfoMapper productInfoMapper;
 
+    @Autowired
+    private OrderInfoMapper orderInfoMapper;
+
     public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer type, String startTime, String endTime){
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
         List<StorageOutputQueryModel> storageOutputList = storageOutputMapper.getInputListByParams(productCode, type, startTime, endTime);
@@ -52,6 +58,16 @@ public class StorageOutputService {
         productInfo.setTotalAmount(productInfo.getTotalAmount().subtract(storageOutputModel.getAmount()));
         productInfo.setUpdateTime(new Date());
         productInfoMapper.updateByPrimaryKey(productInfo);
+
+        // 订单号不为空，则需要校验是否有这个订单号
+        if(StringUtils.isNotBlank(storageOutputModel.getOrderNo())){
+            OrderInfo condition = new OrderInfo();
+            condition.setOrderNo(storageOutputModel.getOrderNo());
+            List<OrderInfo> orderInfoList = orderInfoMapper.select(condition);
+            if(CollectionUtils.isEmpty(orderInfoList)){
+                throw new BusinessException(MsgResult.ORDER_INFO_EXIST_NO);
+            }
+        }
 
         StorageOutput storageOutput = new StorageOutput();
         BeanUtils.copyProperties(storageOutputModel, storageOutput);
