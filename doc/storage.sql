@@ -72,7 +72,7 @@ CREATE TABLE `customer_info` (
 
 /*Data for the table `customer_info` */
 
-insert  into `customer_info`(`id`,`name`,`priority`,`create_time`,`update_time`) values (585411749436592128,'安泰',99,'2019-06-04 02:17:17.491','2019-06-04 02:18:07.452'),(585412113078554624,'安泰纳',98,'2019-06-04 02:18:44.189','2019-06-04 02:18:44.189'),(585412182536228864,'广美达',97,'2019-06-04 02:19:00.749','2019-06-04 02:19:00.749'),(585413670566236160,'佰奥',96,'2019-06-04 02:24:55.523','2019-06-04 02:24:55.523'),(588057211822018560,'bbb',0,'2019-06-11 09:29:24.873','2019-06-17 02:22:22.234'),(590124134537760768,'ccc',0,'2019-06-17 02:22:37.650','2019-06-17 02:22:37.650');
+insert  into `customer_info`(`id`,`name`,`priority`,`create_time`,`update_time`) values (585411749436592128,'安泰',99,'2019-06-04 02:17:17.491','2019-06-04 02:18:07.452'),(585412113078554624,'安泰纳',98,'2019-06-04 02:18:44.189','2019-06-04 02:18:44.189');
 
 /*Table structure for table `order_delivery_detail` */
 
@@ -89,14 +89,13 @@ CREATE TABLE `order_delivery_detail` (
 
 /*Data for the table `order_delivery_detail` */
 
-insert  into `order_delivery_detail`(`id`,`order_id`,`amount`,`create_time`,`update_time`) values (588755256129753088,588728161651527680,'1.00','2019-06-13 07:43:11.605','2019-06-13 07:43:11.605'),(588755628730748928,588728161651527680,'5.00','2019-06-13 07:44:40.440','2019-06-13 07:44:40.440'),(588756611472953344,588728161651527680,'4.00','2019-06-13 07:48:34.744','2019-06-13 07:48:34.744'),(588758563070021632,588728161651527680,'789.00','2019-06-13 07:56:20.041','2019-06-13 07:56:20.041'),(589501250773585920,588728161651527680,'1.00','2019-06-15 09:07:30.588','2019-06-15 09:07:30.588'),(590124362871476224,588727207615139840,'100.00','2019-06-17 02:23:32.089','2019-06-17 02:23:32.089');
-
 /*Table structure for table `order_info` */
 
 DROP TABLE IF EXISTS `order_info`;
 
 CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL,
+  `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单号',
   `customer_id` bigint(20) NOT NULL COMMENT '客户编号',
   `product_code` varchar(64) NOT NULL COMMENT '物料编号',
   `amount` decimal(10,2) NOT NULL COMMENT '订单量',
@@ -110,8 +109,6 @@ CREATE TABLE `order_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客户订单表';
 
 /*Data for the table `order_info` */
-
-insert  into `order_info`(`id`,`customer_id`,`product_code`,`amount`,`delivery_amount`,`remaining_amount`,`status`,`delivery_date`,`create_time`,`update_time`) values (588727207615139840,585412113078554624,'YTZ013272','20000.00','100.00','19900.00',0,'2019-07-11','2019-06-13 05:51:44.319','2019-06-17 12:11:27.100'),(588728161651527680,585412182536228864,'P15018100','800.00','800.00','0.00',1,'2019-07-31','2019-06-13 05:55:31.779','2019-06-17 12:09:57.046'),(590271869719023616,590124134537760768,'A76554T','10000.00','0.00','0.00',0,'2019-06-30','2019-06-17 12:09:40.463','2019-06-17 12:09:40.463'),(590272154185109504,588057211822018560,'A76554T','1000.00','0.00','0.00',0,'2019-08-30','2019-06-17 12:10:48.284','2019-06-17 12:11:41.250');
 
 /*Table structure for table `product_info` */
 
@@ -134,8 +131,6 @@ CREATE TABLE `product_info` (
 
 /*Data for the table `product_info` */
 
-insert  into `product_info`(`id`,`product_code`,`product_name`,`model`,`type`,`product_unit`,`customer_product_code`,`total_amount`,`customer_id`,`create_time`,`update_time`) values (585413003961307136,'C13047100','主机外壳','PS-E109主机外壳  丝印在孔下方',0,0,'140.00604A','1.00',585411749436592128,'2019-06-04 02:22:16.592','2019-06-17 11:46:45.213'),(585413459588550656,'YTZ013272','7.2铜针','挤注无电镀铜针 7.25*2.5mm',0,0,'725250320','0.00',585413670566236160,'2019-06-04 02:24:05.222','2019-06-17 11:46:30.625'),(585413918894198784,'P15018100','电源盒','G3电源盒 底壳 PC 白色 佰奥',0,0,'P17010000','0.00',585412182536228864,'2019-06-04 02:25:54.729','2019-06-17 11:46:13.505'),(585414069155139584,'P15018110','电源盒','G3电源盒 面壳 191*52.5*36.75 PC 白色 佰奥',1,0,'P15018100','0.00',585412113078554624,'2019-06-04 02:26:30.554','2019-06-17 11:46:05.464'),(590143969996967936,'A76554T','测试','测试-测试-测试',1,1,'client-001','100.00',588057211822018560,'2019-06-17 03:41:26.792','2019-06-17 11:45:38.568'),(590228410702368768,'YPC012520','2520','\"LN-2520ZH PC 米白色 帝人\"',0,2,'LN-2520ZH CM10558ZH','0.00',585412113078554624,'2019-06-17 09:16:59.025','2019-06-17 11:45:21.083');
-
 /*Table structure for table `rpt_storage` */
 
 DROP TABLE IF EXISTS `rpt_storage`;
@@ -154,7 +149,19 @@ CREATE TABLE `rpt_storage` (
 
 /*Data for the table `rpt_storage` */
 
-insert  into `rpt_storage`(`id`,`product_code`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`) values (1127827675931611136,'A76554T','100.00','0.00',0,'2019-06-15 14:47:26.000','2019-06-15 14:47:26.000');
+/*Table structure for table `shedlock` */
+
+DROP TABLE IF EXISTS `shedlock`;
+
+CREATE TABLE `shedlock` (
+  `name` varchar(64) NOT NULL,
+  `lock_until` timestamp(3) NULL DEFAULT NULL,
+  `locked_at` timestamp(3) NULL DEFAULT NULL,
+  `locked_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Data for the table `shedlock` */
 
 /*Table structure for table `storage_input` */
 
@@ -166,14 +173,13 @@ CREATE TABLE `storage_input` (
   `amount` decimal(10,2) NOT NULL COMMENT '入库量',
   `type` tinyint(1) NOT NULL COMMENT '入库类型(0:采购入库, 1:生产入库, 2:退货入库)',
   `statistic_flag` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计状态(0:未统计, 1:已统计)',
+  `order_no` varchar(64) DEFAULT NULL COMMENT '订单号',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `storage_input` */
-
-insert  into `storage_input`(`id`,`product_code`,`amount`,`type`,`statistic_flag`,`create_time`,`update_time`) values (590235593632518144,'A76554T','100.00',0,1,'2019-06-17 09:45:32','2019-06-18 15:06:43'),(590254138827345920,'C13047100','1.00',1,0,'2019-06-17 10:59:13','2019-06-17 10:59:13');
 
 /*Table structure for table `storage_output` */
 
@@ -185,6 +191,7 @@ CREATE TABLE `storage_output` (
   `amount` decimal(10,2) NOT NULL,
   `type` tinyint(1) NOT NULL COMMENT '出库类型(0:生产出库, 1:销售出库, 2:退货出库)',
   `statistic_flag` tinyint(1) NOT NULL COMMENT '统计状态(0:未统计, 1:已统计)',
+  `order_no` varchar(64) DEFAULT NULL COMMENT '订单号',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
   PRIMARY KEY (`id`)
