@@ -1,15 +1,15 @@
-package com.antaina.model.order;
+package com.antaina.model.product;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class OrderInfoExportModel {
-
-    private String orderNo;
+public class ProductInfoExportModel {
 
     private String customerName;
+
+    private String customerProductCode;
 
     private String productCode;
 
@@ -21,15 +21,7 @@ public class OrderInfoExportModel {
 
     private String productUnit;
 
-    private java.math.BigDecimal totalAmount;
-
-    private BigDecimal deliveryAmount;
-
-    private BigDecimal remainingAmount;
-
-    private String status;
-
-    private String deliveryDate;
+    private BigDecimal totalAmount;
 
     private java.util.Date createTime;
 

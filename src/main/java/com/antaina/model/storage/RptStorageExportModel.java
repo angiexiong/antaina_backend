@@ -1,13 +1,13 @@
-package com.antaina.model.order;
+package com.antaina.model.storage;
 
+import com.antaina.entity.storage.RptStorage;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class OrderInfoExportModel {
-
-    private String orderNo;
+public class RptStorageExportModel {
 
     private String customerName;
 
@@ -21,15 +21,13 @@ public class OrderInfoExportModel {
 
     private String productUnit;
 
-    private java.math.BigDecimal totalAmount;
+    private BigDecimal totalAmount;
 
-    private BigDecimal deliveryAmount;
+    private java.math.BigDecimal inputAmount;
 
-    private BigDecimal remainingAmount;
+    private java.math.BigDecimal outputAmount;
 
-    private String status;
-
-    private String deliveryDate;
+    private String type;
 
     private java.util.Date createTime;
 

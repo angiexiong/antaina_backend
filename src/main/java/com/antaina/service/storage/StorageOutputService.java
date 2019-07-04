@@ -2,7 +2,6 @@ package com.antaina.service.storage;
 
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.entity.product.ProductInfo;
-import com.antaina.entity.storage.StorageInput;
 import com.antaina.entity.storage.StorageOutput;
 import com.antaina.enums.MsgResult;
 import com.antaina.exception.BusinessException;

@@ -30,4 +30,28 @@
         WHERE rs. `type` =#{frequencyType}
         AND rs.create_time >= DATE_ADD(NOW(), INTERVAL ${timeInterval} ${timeUnit});
     </select>
+
+    <select id="exportRptStorage" resultType="com.antaina.model.storage.RptStorageExportModel">
+        SELECT
+        ci.`name` AS customer_name,
+        rs.`product_code`,
+        pi.`product_name`,
+        pi.`model` AS product_model,
+        CASE pi.`type` WHEN 0 THEN '原料' WHEN 1 THEN '半成品' WHEN 2 THEN '成品' ELSE '未定义' END AS product_type,
+        CASE pi.`product_unit` WHEN 0 THEN '片' WHEN 1 THEN '个' WHEN 2 THEN 'KG' ELSE '未定义' END AS product_unit,
+        pi.`total_amount`,
+        rs.`input_amount`,
+        rs.`output_amount`,
+        CASE rs.`type` WHEN 0 THEN '每小时' WHEN 1 THEN '每天' WHEN 2 THEN '每周' WHEN 3 THEN '每月' WHEN 4 THEN '每年' ELSE '未定义' END type,
+        rs.`create_time`,
+        rs.`update_time`
+        FROM `rpt_storage` rs
+        LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
+        LEFT JOIN `customer_info` ci ON ci.`id`= pi.`customer_id`
+        where 1=1
+        <if test="type!=null"> AND rs. `type` =#{type}</if>
+        <if test="productCode!=null and productCode!=''"> AND pi. `product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="startTime!=null and startTime!=''"> AND rs.`create_time` >= #{startTime}</if>
+        <if test="endTime!=null and endTime!=''"> AND <![CDATA[ rs.`create_time` <= #{endTime} ]]> </if>
+    </select>
 </mapper>

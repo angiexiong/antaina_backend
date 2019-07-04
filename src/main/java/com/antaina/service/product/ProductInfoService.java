@@ -7,6 +7,7 @@ import com.antaina.exception.BusinessException;
 import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.mapper.RptStorageMapper;
 import com.antaina.model.BaseModel;
+import com.antaina.model.product.ProductInfoExportModel;
 import com.antaina.model.product.ProductInfoModel;
 import com.antaina.model.product.ProductInfoQueryModel;
 import com.antaina.service.order.OrderInfoService;
@@ -104,5 +105,9 @@ public class ProductInfoService {
             return null;
         }
         return productInfoList.get(0);
+    }
+
+    public List<ProductInfoExportModel> exportProduct(String customerProductCode, String productCode, String productName, Integer type, Long customerId) {
+        return productInfoMapper.exportProduct(customerProductCode, productCode, productName, type, customerId);
     }
 }

@@ -3,6 +3,7 @@ package com.antaina.controller.product;
 import com.antaina.entity.product.ProductInfo;
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
+import com.antaina.model.product.ProductInfoExportModel;
 import com.antaina.model.product.ProductInfoModel;
 import com.antaina.resp.RespBuilder;
 import com.antaina.service.product.ProductInfoService;
@@ -65,6 +66,13 @@ public class ProductInfoController {
     @GetMapping("/getProductList")
     public ResponseEntity getProductList(){
         List<ProductInfo> list = productInfoService.getProductList();
+        return RespBuilder.build(BaseResult.SUCCESS, list);
+    }
+
+    @ApiOperation(value = "导出")
+    @GetMapping("/exportProduct")
+    public ResponseEntity exportProduct(BaseModel baseModel, String customerProductCode, String productCode, String productName, Integer type, Long customerId){
+        List<ProductInfoExportModel> list = productInfoService.exportProduct(customerProductCode, productCode, productName, type, customerId);
         return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }

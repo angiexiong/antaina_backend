@@ -1,6 +1,7 @@
 package com.antaina.mapper;
 
 import com.antaina.entity.product.ProductInfo;
+import com.antaina.model.product.ProductInfoExportModel;
 import com.antaina.model.product.ProductInfoQueryModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -15,4 +16,10 @@ public interface ProductInfoMapper extends Mapper<ProductInfo> {
                                                 @Param("productName") String productName,
                                                 @Param("type") Integer type,
                                                 @Param("customerId") Long customerId);
+
+    List<ProductInfoExportModel> exportProduct(@Param("customerProductCode") String customerProductCode,
+                                               @Param("productCode") String productCode,
+                                               @Param("productName") String productName,
+                                               @Param("type") Integer type,
+                                               @Param("customerId") Long customerId);
 }
