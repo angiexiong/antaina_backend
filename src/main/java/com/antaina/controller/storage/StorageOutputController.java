@@ -2,7 +2,9 @@ package com.antaina.controller.storage;
 
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
+import com.antaina.model.storage.StorageOutputExportModel;
 import com.antaina.model.storage.StorageOutputModel;
+import com.antaina.model.storage.StorageOutputQueryModel;
 import com.antaina.resp.RespBuilder;
 import com.antaina.service.storage.StorageOutputService;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @Slf4j
@@ -25,8 +29,8 @@ public class StorageOutputController {
 
     @ApiOperation(value = "查询")
     @GetMapping("/getListWithPage")
-    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, Integer type, String startTime, String endTime){
-        PageInfo page = storageOutputService.getListWithPage(baseModel, productCode, type, startTime, endTime);
+    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
+        PageInfo page = storageOutputService.getListWithPage(baseModel, productCode, orderNo, type, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, page);
     }
 
@@ -49,5 +53,12 @@ public class StorageOutputController {
     public ResponseEntity delete(Long id){
         storageOutputService.delete(id);
         return RespBuilder.build(BaseResult.SUCCESS);
+    }
+
+    @ApiOperation(value = "导出")
+    @GetMapping("/exportOutput")
+    public ResponseEntity exportOutput(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
+        List<StorageOutputExportModel> list = storageOutputService.exportOutput(productCode, orderNo, type, startTime, endTime);
+        return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }

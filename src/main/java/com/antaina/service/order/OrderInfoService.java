@@ -8,6 +8,7 @@ import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
 import com.antaina.model.BaseModel;
+import com.antaina.model.order.OrderInfoExportModel;
 import com.antaina.model.order.OrderInfoModel;
 import com.antaina.model.order.OrderInfoQueryModel;
 import com.antaina.util.PageUtil;
@@ -93,5 +94,9 @@ public class OrderInfoService {
                 });
             }
         }
+    }
+
+    public List<OrderInfoExportModel> exportOrder(String productCode, String orderNo, Integer type, String startTime, String endTime) {
+        return orderInfoMapper.exportOrder(productCode, orderNo, type, startTime, endTime);
     }
 }

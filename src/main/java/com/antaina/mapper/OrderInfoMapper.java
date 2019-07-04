@@ -1,6 +1,7 @@
 package com.antaina.mapper;
 
 import com.antaina.entity.order.OrderInfo;
+import com.antaina.model.order.OrderInfoExportModel;
 import com.antaina.model.order.OrderInfoQueryModel;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,10 @@ public interface OrderInfoMapper extends Mapper<OrderInfo> {
                                                    @Param("status") Integer status,
                                                    @Param("startTime") String startTime,
                                                    @Param("endTime") String endTime);
+
+    List<OrderInfoExportModel> exportOrder(@Param("productCode") String productCode,
+                                           @Param("orderNo") String orderNo,
+                                           @Param("status") Integer status,
+                                           @Param("startTime") String startTime,
+                                           @Param("endTime") String endTime);
 }

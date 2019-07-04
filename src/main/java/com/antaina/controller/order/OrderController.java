@@ -3,7 +3,9 @@ package com.antaina.controller.order;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
+import com.antaina.model.order.OrderInfoExportModel;
 import com.antaina.model.order.OrderInfoModel;
+import com.antaina.model.storage.StorageInputExportModel;
 import com.antaina.resp.RespBuilder;
 import com.antaina.service.order.OrderInfoService;
 import com.github.pagehelper.PageInfo;
@@ -13,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @Slf4j
@@ -57,5 +61,12 @@ public class OrderController {
     public ResponseEntity getById(Long id) {
         OrderInfo orderInfo = orderInfoService.getById(id);
         return RespBuilder.build(BaseResult.SUCCESS, orderInfo);
+    }
+
+    @ApiOperation(value = "导出")
+    @GetMapping("/exportOrder")
+    public ResponseEntity exportOutput(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
+        List<OrderInfoExportModel> list = orderInfoService.exportOrder(productCode, orderNo, type, startTime, endTime);
+        return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }

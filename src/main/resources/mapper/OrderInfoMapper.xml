@@ -15,4 +15,30 @@
         <if test="endTime!=null and endTime!=''"> and <![CDATA[ oi.`create_time` <= #{endTime} ]]> </if>
         order by c.priority desc, oi.create_time desc
     </select>
+
+    <select id="exportOrder" resultType="com.antaina.model.order.OrderInfoExportModel">
+        SELECT
+        oi.order_no,
+        c.`name` as customer_name ,
+        oi.product_code,
+        p.product_name,
+        p.`product_name`,p.`model` as product_model,
+        oi.amount as total_amount,
+        oi.delivery_amount,
+        oi.remaining_amount,
+        CASE oi.status WHEN 0 THEN '未全部交货' WHEN 1 THEN '已完成' ELSE '未定义' END AS status,
+        oi.delivery_date,
+        oi.create_time,
+        oi.update_time
+        FROM order_info oi
+        LEFT JOIN `customer_info` c ON oi.`customer_id` = c.`id`
+        LEFT JOIN `product_info` p ON oi.`product_code` = p.`product_code`
+        where 1=1
+        <if test="orderNo!=null and orderNo!=''"> and oi.`order_no` like CONCAT('%',#{orderNo},'%')</if>
+        <if test="productCode!=null and productCode!=''"> and oi.`product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="status!=null"> and oi.`status` =#{status}</if>
+        <if test="startTime!=null and startTime!=''"> and oi.`create_time` >= #{startTime}</if>
+        <if test="endTime!=null and endTime!=''"> and <![CDATA[ oi.`create_time` <= #{endTime} ]]> </if>
+        order by c.priority desc, oi.create_time desc
+    </select>
 </mapper>

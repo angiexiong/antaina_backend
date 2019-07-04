@@ -10,6 +10,7 @@ import com.antaina.mapper.OrderInfoMapper;
 import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.mapper.StorageOutputMapper;
 import com.antaina.model.BaseModel;
+import com.antaina.model.storage.StorageOutputExportModel;
 import com.antaina.model.storage.StorageOutputModel;
 import com.antaina.model.storage.StorageOutputQueryModel;
 import com.antaina.service.product.ProductInfoService;
@@ -42,9 +43,9 @@ public class StorageOutputService {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer type, String startTime, String endTime){
+    public PageInfo getListWithPage(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<StorageOutputQueryModel> storageOutputList = storageOutputMapper.getInputListByParams(productCode, type, startTime, endTime);
+        List<StorageOutputQueryModel> storageOutputList = storageOutputMapper.getInputListByParams(productCode, orderNo, type, startTime, endTime);
         return PageUtil.create(storageOutputList);
     }
 
@@ -114,5 +115,9 @@ public class StorageOutputService {
         StorageOutput condition = new StorageOutput();
         condition.setProductCode(productCode);
         storageOutputMapper.delete(condition);
+    }
+
+    public List<StorageOutputExportModel> exportOutput(String productCode, String orderNo, Integer type, String startTime, String endTime) {
+        return storageOutputMapper.getExportOutputList(productCode, orderNo, type, startTime, endTime);
     }
 }

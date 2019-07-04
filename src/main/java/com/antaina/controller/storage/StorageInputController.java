@@ -2,7 +2,10 @@ package com.antaina.controller.storage;
 
 import com.antaina.enums.BaseResult;
 import com.antaina.model.BaseModel;
+import com.antaina.model.storage.StorageInputExportModel;
 import com.antaina.model.storage.StorageInputModel;
+import com.antaina.model.storage.StorageOutputExportModel;
+import com.antaina.model.storage.StorageOutputQueryModel;
 import com.antaina.resp.RespBuilder;
 import com.antaina.service.storage.StorageInputService;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @Slf4j
@@ -49,5 +54,12 @@ public class StorageInputController {
     public ResponseEntity delete(Long id){
         storageInputService.delete(id);
         return RespBuilder.build(BaseResult.SUCCESS);
+    }
+
+    @ApiOperation(value = "导出")
+    @GetMapping("/exportInput")
+    public ResponseEntity exportOutput(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
+        List<StorageInputExportModel> list = storageInputService.exportOutput(productCode, orderNo, type, startTime, endTime);
+        return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }
