@@ -4,12 +4,15 @@ import com.antaina.entity.order.OrderDeliveryDetail;
 import com.antaina.entity.order.OrderInfo;
 import com.antaina.enums.MsgResult;
 import com.antaina.enums.common.OrderStatusEnum;
+import com.antaina.enums.common.StorageInputTypeEnum;
 import com.antaina.enums.common.StorageOutputTypeEnum;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
 import com.antaina.model.order.OrderDeliveryDetailModel;
+import com.antaina.model.storage.StorageInputModel;
 import com.antaina.model.storage.StorageOutputModel;
+import com.antaina.service.storage.StorageInputService;
 import com.antaina.service.storage.StorageOutputService;
 import com.antaina.util.UidUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,9 @@ public class OrderDeliveryDetailService {
 
     @Autowired
     private StorageOutputService storageOutputService;
+
+    @Autowired
+    private StorageInputService storageInputService;
 
     @Autowired
     private OrderDeliveryDetailMapper orderDeliveryDetailMapper;
@@ -103,5 +109,13 @@ public class OrderDeliveryDetailService {
             orderDeliveryDetailMapper.deleteByPrimaryKey(deliveryId);
             log.info("删除出货记录成功，未交货数量已重新计算");
         }
+
+        // 增加入库记录
+        StorageInputModel sim = new StorageInputModel();
+        sim.setProductCode(orderInfo.getProductCode());
+        sim.setAmount(odd.getAmount());
+        sim.setOrderNo(orderInfo.getOrderNo());
+        sim.setType(StorageInputTypeEnum.REFUND.ordinal());
+        storageInputService.add(sim);
     }
 }
