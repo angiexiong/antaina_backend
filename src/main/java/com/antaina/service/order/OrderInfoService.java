@@ -2,15 +2,18 @@ package com.antaina.service.order;
 
 import com.antaina.entity.order.OrderDeliveryDetail;
 import com.antaina.entity.order.OrderInfo;
+import com.antaina.entity.product.ProductInfo;
 import com.antaina.enums.MsgResult;
 import com.antaina.enums.common.OrderStatusEnum;
 import com.antaina.exception.BusinessException;
 import com.antaina.mapper.OrderDeliveryDetailMapper;
 import com.antaina.mapper.OrderInfoMapper;
+import com.antaina.mapper.ProductInfoMapper;
 import com.antaina.model.BaseModel;
 import com.antaina.model.order.OrderInfoExportModel;
 import com.antaina.model.order.OrderInfoModel;
 import com.antaina.model.order.OrderInfoQueryModel;
+import com.antaina.service.product.ProductInfoService;
 import com.antaina.util.PageUtil;
 import com.antaina.util.UidUtil;
 import com.github.pagehelper.PageHelper;
@@ -35,13 +38,23 @@ public class OrderInfoService {
     @Autowired
     private OrderDeliveryDetailMapper orderDeliveryDetailMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String orderNo, String productCode, Integer status, String startTime, String endTime) {
+    @Autowired
+    private ProductInfoMapper productInfoMapper;
+
+    public PageInfo getListWithPage(BaseModel baseModel, String orderNo, String customerProductCode, Integer status, String startTime, String endTime) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(orderNo, productCode, status, startTime, endTime);
+        List<OrderInfoQueryModel> orderInfoList = orderInfoMapper.getOrderListByParams(orderNo, customerProductCode, status, startTime, endTime);
         return PageUtil.create(orderInfoList);
     }
 
     public void add(OrderInfoModel orderInfoModel) {
+        ProductInfo condition = new ProductInfo();
+        condition.setCustomerProductCode(orderInfoModel.getCustomerProductCode());
+        List<ProductInfo> productInfoList = productInfoMapper.select(condition);
+        if(CollectionUtils.isEmpty(productInfoList)){
+            throw new BusinessException(MsgResult.CUSTOMER_PRODUCT_INFO_EXIST_NO);
+        }
+
         OrderInfo orderInfo = new OrderInfo();
         BeanUtils.copyProperties(orderInfoModel, orderInfo);
         orderInfo.setId(UidUtil.getInstance().nextId());
@@ -83,10 +96,10 @@ public class OrderInfoService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByProductCode(String productCode) {
-        if (StringUtils.isNotBlank(productCode)) {
+    public void deleteByCustomerProductCode(String customerProductCode) {
+        if (StringUtils.isNotBlank(customerProductCode)) {
             OrderInfo condition = new OrderInfo();
-            condition.setProductCode(productCode);
+            condition.setCustomerProductCode(customerProductCode);
             List<OrderInfo> orderInfoList = orderInfoMapper.select(condition);
             if (!CollectionUtils.isEmpty(orderInfoList)) {
                 orderInfoList.forEach(e -> {
@@ -96,7 +109,7 @@ public class OrderInfoService {
         }
     }
 
-    public List<OrderInfoExportModel> exportOrder(String productCode, String orderNo, Integer type, String startTime, String endTime) {
-        return orderInfoMapper.exportOrder(productCode, orderNo, type, startTime, endTime);
+    public List<OrderInfoExportModel> exportOrder(String customerProductCode, String orderNo, Integer type, String startTime, String endTime) {
+        return orderInfoMapper.exportOrder(customerProductCode, orderNo, type, startTime, endTime);
     }
 }

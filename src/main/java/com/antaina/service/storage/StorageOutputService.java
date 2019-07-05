@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -42,20 +43,23 @@ public class StorageOutputService {
     @Autowired
     private OrderInfoMapper orderInfoMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
+    public PageInfo getListWithPage(BaseModel baseModel, String customerProductCode, String orderNo, Integer type, String startTime, String endTime){
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<StorageOutputQueryModel> storageOutputList = storageOutputMapper.getInputListByParams(productCode, orderNo, type, startTime, endTime);
+        List<StorageOutputQueryModel> storageOutputList = storageOutputMapper.getOutputListByParams(customerProductCode, orderNo, type, startTime, endTime);
         return PageUtil.create(storageOutputList);
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void add(StorageOutputModel storageOutputModel){
 
-        ProductInfo productInfo = productInfoService.getProductInfoByCode(storageOutputModel.getProductCode());
+        ProductInfo productInfo = productInfoService.getProductInfoByCustomerCode(storageOutputModel.getCustomerProductCode());
         if(null == productInfo){
             throw new BusinessException(MsgResult.PRODUCT_INFO_EXIST_NO);
         }
         productInfo.setTotalAmount(productInfo.getTotalAmount().subtract(storageOutputModel.getAmount()));
+        if(BigDecimal.ZERO.compareTo(productInfo.getTotalAmount()) > 0){
+            throw new BusinessException(MsgResult.STORAGE_AMOUNT_NOT_SUFFICIENT);
+        }
         productInfo.setUpdateTime(new Date());
         productInfoMapper.updateByPrimaryKey(productInfo);
 
@@ -71,6 +75,7 @@ public class StorageOutputService {
 
         StorageOutput storageOutput = new StorageOutput();
         BeanUtils.copyProperties(storageOutputModel, storageOutput);
+        storageOutput.setCustomerProductCode(productInfo.getCustomerProductCode());
         storageOutput.setId(UidUtil.getInstance().nextId());
         storageOutput.setStatisticFlag(0);
         storageOutput.setCreateTime(new Date());
@@ -93,7 +98,7 @@ public class StorageOutputService {
         if(null != id){
             StorageOutput storageOutput = storageOutputMapper.selectByPrimaryKey(id);
             if(storageOutput != null){
-                ProductInfo productInfo = productInfoService.getProductInfoByCode(storageOutput.getProductCode());
+                ProductInfo productInfo = productInfoService.getProductInfoByCustomerCode(storageOutput.getCustomerProductCode());
                 if(null == productInfo){
                     throw new BusinessException(MsgResult.PRODUCT_INFO_EXIST_NO);
                 }
@@ -107,16 +112,16 @@ public class StorageOutputService {
 
     /**
      * 本接口仅供删除物料信息时删除进出库时使用
-     * @param productCode
+     * @param customerProductCode
      */
     @Transactional(rollbackFor = Exception.class)
-    public void deleteByProductCode(String productCode){
+    public void deleteByCustomerProductCode(String customerProductCode){
         StorageOutput condition = new StorageOutput();
-        condition.setProductCode(productCode);
+        condition.setCustomerProductCode(customerProductCode);
         storageOutputMapper.delete(condition);
     }
 
-    public List<StorageOutputExportModel> exportOutput(String productCode, String orderNo, Integer type, String startTime, String endTime) {
-        return storageOutputMapper.getExportOutputList(productCode, orderNo, type, startTime, endTime);
+    public List<StorageOutputExportModel> exportOutput(String customerProductCode, String orderNo, Integer type, String startTime, String endTime) {
+        return storageOutputMapper.getExportOutputList(customerProductCode, orderNo, type, startTime, endTime);
     }
 }

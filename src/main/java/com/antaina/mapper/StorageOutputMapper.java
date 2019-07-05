@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface StorageOutputMapper extends Mapper<StorageOutput> {
 
-    List<StorageOutputQueryModel> getInputListByParams(@Param("productCode") String productCode,
+    List<StorageOutputQueryModel> getOutputListByParams(@Param("customerProductCode") String customerProductCode,
                                                        @Param("orderNo") String orderNo,
                                                        @Param("type") Integer type,
                                                        @Param("startTime") String startTime,
@@ -23,7 +23,7 @@ public interface StorageOutputMapper extends Mapper<StorageOutput> {
 
     int batchUpdateStatisticFlag(@Param("ids") List<Long> ids);
 
-    List<StorageOutputExportModel> getExportOutputList(@Param("productCode") String productCode,
+    List<StorageOutputExportModel> getExportOutputList(@Param("customerProductCode") String customerProductCode,
                                                        @Param("orderNo") String orderNo,
                                                        @Param("type") Integer type,
                                                        @Param("startTime") String startTime,

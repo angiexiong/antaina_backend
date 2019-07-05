@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class StorageOutputExportModel {
 
+    private String customerProductCode;
+
     private String productCode;
 
     private String productName;

@@ -50,6 +50,13 @@ public class ProductInfoService {
     }
 
     public void add(ProductInfoModel productInfoModel) {
+        ProductInfo condition = new ProductInfo();
+        condition.setCustomerProductCode(productInfoModel.getCustomerProductCode());
+        List<ProductInfo> productInfoList = productInfoMapper.select(condition);
+        if(!CollectionUtils.isEmpty(productInfoList)){
+            throw new BusinessException(MsgResult.CUSTOMER_PRODUCT_CODE_EXIST_YES);
+        }
+
         ProductInfo materialInfo = new ProductInfo();
         BeanUtils.copyProperties(productInfoModel, materialInfo);
         materialInfo.setId(UidUtil.getInstance().nextId());
@@ -63,6 +70,13 @@ public class ProductInfoService {
             throw new BusinessException(MsgResult.PRODUCT_ID_EMPTY);
         }
         ProductInfo materialInfo = productInfoMapper.selectByPrimaryKey(productInfoModel.getId());
+
+        ProductInfo condition = new ProductInfo();
+        condition.setCustomerProductCode(productInfoModel.getCustomerProductCode());
+        List<ProductInfo> productInfoList = productInfoMapper.select(condition);
+        if(CollectionUtils.isEmpty(productInfoList)){
+            throw new BusinessException(MsgResult.CUSTOMER_PRODUCT_CODE_EXIST_YES);
+        }
         BeanUtils.copyProperties(productInfoModel, materialInfo);
         materialInfo.setUpdateTime(new Date());
         productInfoMapper.updateByPrimaryKeySelective(materialInfo);
@@ -72,16 +86,16 @@ public class ProductInfoService {
         if (null != id) {
             ProductInfo productInfo = productInfoMapper.selectByPrimaryKey(id);
             if (productInfo != null) {
-                String productCode = productInfo.getProductCode();
+                String customerProductCode = productInfo.getCustomerProductCode();
 
                 // 级联删除其他表与本物料相关的记录，物理删除
                 // 暂时需要删除记录的表：order_info + order_delivery_detail，storage_input，storage_output，rpt_storage
-                orderInfoService.deleteByProductCode(productCode);
-                storageInputService.deleteByProductCode(productCode);
-                storageOutputService.deleteByProductCode(productCode);
+                orderInfoService.deleteByCustomerProductCode(customerProductCode);
+                storageInputService.deleteByCustomerProductCode(customerProductCode);
+                storageOutputService.deleteByCustomerProductCode(customerProductCode);
 
                 RptStorage condition = new RptStorage();
-                condition.setProductCode(productCode);
+                condition.setCustomerProductCode(customerProductCode);
                 rptStorageMapper.delete(condition);
 
                 productInfoMapper.deleteByPrimaryKey(id);
@@ -97,9 +111,9 @@ public class ProductInfoService {
         return productInfoMapper.selectAll();
     }
 
-    public ProductInfo getProductInfoByCode(String productCode) {
+    public ProductInfo getProductInfoByCustomerCode(String customerProductCode) {
         ProductInfo pi = new ProductInfo();
-        pi.setProductCode(productCode);
+        pi.setCustomerProductCode(customerProductCode);
         List<ProductInfo> productInfoList = productInfoMapper.select(pi);
         if (CollectionUtils.isEmpty(productInfoList)) {
             return null;

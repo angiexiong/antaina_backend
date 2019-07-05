@@ -16,6 +16,12 @@ public class RptStorageQueryModel extends RptStorage {
     private String customerName;
 
     /**
+     * 物料编号
+     */
+    @ApiModelProperty(value = "物料编号")
+    private  String productCode;
+
+    /**
      * 物料名
      */
     @ApiModelProperty(value = "物料名")

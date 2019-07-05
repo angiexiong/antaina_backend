@@ -18,13 +18,13 @@ public class RptStorageService {
     @Autowired
     private RptStorageMapper rptStorageMapper;
 
-    public PageInfo getListWithPage(BaseModel baseModel, String productCode, Integer type, String startTime, String endTime) {
+    public PageInfo getListWithPage(BaseModel baseModel, String customerProductCode, Integer type, String startTime, String endTime) {
         PageHelper.startPage(baseModel.getPageNum(), baseModel.getPageSize());
-        List<RptStorageQueryModel> rptStorageList = rptStorageMapper.getListByParams(productCode, type, startTime, endTime);
+        List<RptStorageQueryModel> rptStorageList = rptStorageMapper.getListByParams(customerProductCode, type, startTime, endTime);
         return PageUtil.create(rptStorageList);
     }
 
-    public List<RptStorageExportModel> exportRptStorage(String productCode, Integer type, String startTime, String endTime) {
-        return rptStorageMapper.exportRptStorage(productCode, type, startTime, endTime);
+    public List<RptStorageExportModel> exportRptStorage(String customerProductCode, Integer type, String startTime, String endTime) {
+        return rptStorageMapper.exportRptStorage(customerProductCode, type, startTime, endTime);
     }
 }

@@ -63,7 +63,7 @@ DROP TABLE IF EXISTS `customer_info`;
 
 CREATE TABLE `customer_info` (
   `id` bigint(20) NOT NULL,
-  `name` varchar(20) COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户名称',
+  `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '客户名称',
   `priority` int(3) NOT NULL COMMENT '优先级(数字越大，优先级越高)',
   `create_time` datetime(3) NOT NULL,
   `update_time` datetime(3) NOT NULL,
@@ -71,8 +71,6 @@ CREATE TABLE `customer_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='客户表(记录公司名)';
 
 /*Data for the table `customer_info` */
-
-insert  into `customer_info`(`id`,`name`,`priority`,`create_time`,`update_time`) values (585411749436592128,'安泰',99,'2019-06-04 02:17:17.491','2019-06-04 02:18:07.452'),(585412113078554624,'安泰纳',98,'2019-06-04 02:18:44.189','2019-06-04 02:18:44.189');
 
 /*Table structure for table `order_delivery_detail` */
 
@@ -97,7 +95,7 @@ CREATE TABLE `order_info` (
   `id` bigint(20) NOT NULL,
   `order_no` varchar(64) NOT NULL DEFAULT '' COMMENT '订单号',
   `customer_id` bigint(20) NOT NULL COMMENT '客户编号',
-  `product_code` varchar(64) NOT NULL COMMENT '物料编号',
+  `customer_product_code` varchar(64) NOT NULL COMMENT '客户物料编号',
   `amount` decimal(10,2) NOT NULL COMMENT '订单量',
   `delivery_amount` decimal(10,2) NOT NULL COMMENT '已出货量',
   `remaining_amount` decimal(10,2) NOT NULL COMMENT '未出货量',
@@ -137,7 +135,7 @@ DROP TABLE IF EXISTS `rpt_storage`;
 
 CREATE TABLE `rpt_storage` (
   `id` bigint(20) unsigned NOT NULL,
-  `product_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '物料编号',
+  `customer_product_code` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '客户物料编号',
   `input_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '入库物料总量',
   `output_amount` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '出库物料总量',
   `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计类型/统计频率(0:每小时, 1:每天, 2:每周,3:每月,4:每年)',
@@ -169,11 +167,11 @@ DROP TABLE IF EXISTS `storage_input`;
 
 CREATE TABLE `storage_input` (
   `id` bigint(20) NOT NULL,
-  `product_code` varchar(64) NOT NULL COMMENT '物料编号',
+  `customer_product_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '客户物料编号',
+  `order_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '订单号',
   `amount` decimal(10,2) NOT NULL COMMENT '入库量',
   `type` tinyint(1) NOT NULL COMMENT '入库类型(0:采购入库, 1:生产入库, 2:退货入库)',
   `statistic_flag` tinyint(1) NOT NULL DEFAULT '0' COMMENT '统计状态(0:未统计, 1:已统计)',
-  `order_no` varchar(64) DEFAULT NULL COMMENT '订单号',
   `create_time` datetime NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
@@ -187,7 +185,7 @@ DROP TABLE IF EXISTS `storage_output`;
 
 CREATE TABLE `storage_output` (
   `id` bigint(20) NOT NULL,
-  `product_code` varchar(64) NOT NULL,
+  `customer_product_code` varchar(64) NOT NULL COMMENT '客户物料编号',
   `amount` decimal(10,2) NOT NULL,
   `type` tinyint(1) NOT NULL COMMENT '出库类型(0:生产出库, 1:销售出库, 2:退货出库)',
   `statistic_flag` tinyint(1) NOT NULL COMMENT '统计状态(0:未统计, 1:已统计)',

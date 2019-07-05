@@ -70,7 +70,7 @@ public class RptStorageSchedule {
         List<Long> inputIds = null;
         Map<String, List<StorageInputOutputQueryModel>> inputMap = new HashMap<>(productInfoList.size());
         if (!CollectionUtils.isEmpty(inputList)) {
-            inputMap = inputList.stream().collect(Collectors.groupingBy(StorageInputOutputQueryModel::getProductCode));
+            inputMap = inputList.stream().collect(Collectors.groupingBy(StorageInputOutputQueryModel::getCustomerProductCode));
             inputIds = inputList.stream().map(StorageInputOutputQueryModel::getId).collect(Collectors.toList());
         }
 
@@ -79,7 +79,7 @@ public class RptStorageSchedule {
         List<Long> outputIds = null;
         Map<String, List<StorageInputOutputQueryModel>> outputMap = new HashMap<>(productInfoList.size());
         if (!CollectionUtils.isEmpty(outputList)) {
-            outputMap = outputList.stream().collect(Collectors.groupingBy(StorageInputOutputQueryModel::getProductCode));
+            outputMap = outputList.stream().collect(Collectors.groupingBy(StorageInputOutputQueryModel::getCustomerProductCode));
             outputIds = outputList.stream().map(StorageInputOutputQueryModel::getId).collect(Collectors.toList());
         }
 
@@ -101,20 +101,20 @@ public class RptStorageSchedule {
     private List<RptStorage> doStatistics(List<ProductInfo> productInfoList, Map<String, List<StorageInputOutputQueryModel>> inputMap, Map<String, List<StorageInputOutputQueryModel>> outputMap, int frequencyTypeHour) {
         List<RptStorage> resultList = new ArrayList<>(productInfoList.size());
         productInfoList.forEach(e -> {
-            String productCode = e.getProductCode();
+            String customerProductCode = e.getCustomerProductCode();
             BigDecimal inputAmount = BigDecimal.ZERO;
-            List<StorageInputOutputQueryModel> inputList = inputMap.get(productCode);
+            List<StorageInputOutputQueryModel> inputList = inputMap.get(customerProductCode);
             if (!CollectionUtils.isEmpty(inputList)) {
                 inputAmount = inputList.stream().map(StorageInputOutputQueryModel::getAmount).reduce(BigDecimal::add).get();
             }
 
             BigDecimal outputAmount = BigDecimal.ZERO;
-            List<StorageInputOutputQueryModel> outputList = outputMap.get(productCode);
+            List<StorageInputOutputQueryModel> outputList = outputMap.get(customerProductCode);
             if (!CollectionUtils.isEmpty(outputList)) {
                 outputAmount = outputList.stream().map(StorageInputOutputQueryModel::getAmount).reduce(BigDecimal::add).get();
             }
 
-            RptStorage rptStorage = constructReport(productCode, inputAmount, outputAmount, frequencyTypeHour);
+            RptStorage rptStorage = constructReport(customerProductCode, inputAmount, outputAmount, frequencyTypeHour);
             resultList.add(rptStorage);
         });
         return resultList;
@@ -132,7 +132,7 @@ public class RptStorageSchedule {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_HOUR, -1, TIME_UNIT_HOUR);
         Map<String, List<RptStorage>> rptStorageMap = new HashMap<>(16);
         if (!CollectionUtils.isEmpty(rptStorageList)) {
-            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getProductCode));
+            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getCustomerProductCode));
         }
         processStatistics(rptStorageMap, FREQUENCY_TYPE_DAY);
     }
@@ -150,7 +150,7 @@ public class RptStorageSchedule {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_DAY, -7, TIME_UNIT_DAY);
         Map<String, List<RptStorage>> rptStorageMap = null;
         if (!CollectionUtils.isEmpty(rptStorageList)) {
-            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getProductCode));
+            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getCustomerProductCode));
         }
         processStatistics(rptStorageMap, FREQUENCY_TYPE_WEEK);
     }
@@ -168,7 +168,7 @@ public class RptStorageSchedule {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_DAY, -1, TIME_UNIT_MONTH);
         Map<String, List<RptStorage>> rptStorageMap = null;
         if (!CollectionUtils.isEmpty(rptStorageList)) {
-            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getProductCode));
+            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getCustomerProductCode));
         }
         processStatistics(rptStorageMap, FREQUENCY_TYPE_MONTH);
     }
@@ -185,15 +185,15 @@ public class RptStorageSchedule {
         List<RptStorage> rptStorageList = rptStorageMapper.getListByTimeInterval(FREQUENCY_TYPE_MONTH, -12, TIME_UNIT_MONTH);
         Map<String, List<RptStorage>> rptStorageMap = null;
         if (!CollectionUtils.isEmpty(rptStorageList)) {
-            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getProductCode));
+            rptStorageMap = rptStorageList.stream().collect(Collectors.groupingBy(RptStorage::getCustomerProductCode));
         }
         processStatistics(rptStorageMap, FREQUENCY_TYPE_YEAR);
     }
 
-    RptStorage constructReport(String productCode, BigDecimal inputAmount, BigDecimal outputAmount, Integer type) {
+    RptStorage constructReport(String customerProductCode, BigDecimal inputAmount, BigDecimal outputAmount, Integer type) {
         RptStorage rptStorage = new RptStorage();
         rptStorage.setId(UidUtil.getInstance().nextId());
-        rptStorage.setProductCode(productCode);
+        rptStorage.setCustomerProductCode(customerProductCode);
         rptStorage.setInputAmount(inputAmount);
         rptStorage.setOutputAmount(outputAmount);
         rptStorage.setType(type);
@@ -212,16 +212,16 @@ public class RptStorageSchedule {
 
         List<RptStorage> resultList = new ArrayList<>(productInfoList.size());
         productInfoList.forEach(e -> {
-            String productCode = e.getProductCode();
+            String customerProductCode = e.getCustomerProductCode();
             BigDecimal inputAmount = BigDecimal.ZERO;
             BigDecimal outputAmount = BigDecimal.ZERO;
-            List<RptStorage> rptStorageList = rptStorageMap.get(productCode);
+            List<RptStorage> rptStorageList = rptStorageMap.get(customerProductCode);
             if (!CollectionUtils.isEmpty(rptStorageList)) {
                 inputAmount = rptStorageList.stream().map(RptStorage::getInputAmount).reduce(BigDecimal::add).get();
                 outputAmount = rptStorageList.stream().map(RptStorage::getOutputAmount).reduce(BigDecimal::add).get();
             }
 
-            RptStorage rptStorage = constructReport(productCode, inputAmount, outputAmount, destFrequencyType);
+            RptStorage rptStorage = constructReport(customerProductCode, inputAmount, outputAmount, destFrequencyType);
             resultList.add(rptStorage);
         });
 

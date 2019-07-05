@@ -11,6 +11,12 @@ import java.math.BigDecimal;
 public class StorageInputQueryModel extends StorageInput {
 
 	/**
+	 * 物料编号
+	 */
+	@ApiModelProperty(value = "物料编号")
+	private String productCode;
+
+	/**
 	 * 物料名
 	 */
 	@ApiModelProperty(value = "物料名")

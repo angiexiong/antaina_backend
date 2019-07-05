@@ -8,6 +8,12 @@ import lombok.Data;
 public class OrderInfoQueryModel extends OrderInfo {
 
     /**
+     * 物料编号
+     */
+    @ApiModelProperty(value = "物料编号")
+    private String productCode;
+
+    /**
      * 客户名
      */
     @ApiModelProperty(value = "客户名")

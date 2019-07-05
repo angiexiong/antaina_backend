@@ -80,7 +80,7 @@ public class OrderDeliveryDetailService {
         // 增加出库记录
         StorageOutputModel som = new StorageOutputModel();
         som.setOrderNo(orderInfo.getOrderNo());
-        som.setProductCode(orderInfo.getProductCode());
+        som.setCustomerProductCode(orderInfo.getCustomerProductCode());
         som.setAmount(orderDeliveryDetailModel.getAmount());
         som.setType(StorageOutputTypeEnum.PRODUCTION.ordinal());
         storageOutputService.add(som);
@@ -112,9 +112,9 @@ public class OrderDeliveryDetailService {
 
         // 增加入库记录
         StorageInputModel sim = new StorageInputModel();
-        sim.setProductCode(orderInfo.getProductCode());
+        sim.setCustomerProductCode(orderInfo.getCustomerProductCode());
+        sim.setCustomerProductCode(orderInfo.getCustomerProductCode());
         sim.setAmount(odd.getAmount());
-        sim.setOrderNo(orderInfo.getOrderNo());
         sim.setType(StorageInputTypeEnum.REFUND.ordinal());
         storageInputService.add(sim);
     }

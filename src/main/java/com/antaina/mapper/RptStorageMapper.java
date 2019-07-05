@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface RptStorageMapper extends Mapper<RptStorage> {
-    List<RptStorageQueryModel> getListByParams(@Param("productCode") String productCode,
+    List<RptStorageQueryModel> getListByParams(@Param("customerProductCode") String customerProductCode,
                                                @Param("type") Integer type,
                                                @Param("startTime")String startTime,
                                                @Param("endTime")String endTime);
@@ -22,7 +22,7 @@ public interface RptStorageMapper extends Mapper<RptStorage> {
                                            @Param("timeInterval")Integer timeInterval,
                                            @Param("timeUnit")String timeUnit);
 
-    List<RptStorageExportModel> exportRptStorage(@Param("productCode") String productCode,
+    List<RptStorageExportModel> exportRptStorage(@Param("customerProductCode") String customerProductCode,
                                                  @Param("type") Integer type,
                                                  @Param("startTime")String startTime,
                                                  @Param("endTime")String endTime);

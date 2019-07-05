@@ -4,22 +4,22 @@
 <mapper namespace="com.antaina.mapper.RptStorageMapper">
 
     <insert id="batchInsert" parameterType="com.antaina.entity.storage.RptStorage">
-        INSERT INTO `rpt_storage`(`id`,`product_code`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`)
+        INSERT INTO `rpt_storage`(`id`,`customer_product_code`,`input_amount`,`output_amount`,`type`,`create_time`,`update_time`)
         VALUES
         <foreach collection="list" index="index" item="item" separator=",">
-            (#{item.id},#{item.productCode},#{item.inputAmount},#{item.outputAmount},#{item.type},NOW(),NOW())
+            (#{item.id},#{item.customerProductCode},#{item.inputAmount},#{item.outputAmount},#{item.type},NOW(),NOW())
         </foreach>
     </insert>
 
     <select id="getListByParams" resultType="com.antaina.model.storage.RptStorageQueryModel">
-        SELECT ci.`name` AS customer_name, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type`
-        AS product_type, pi.`total_amount`,rs.`id`,rs.`product_code`,rs.`input_amount`,rs.`output_amount`,rs.`type`,rs.`create_time`,rs.`update_time`
+        SELECT ci.`name` AS customer_name, pi.product_code, pi.`product_name`,pi.`model` AS product_model, pi.`product_unit`, pi.`type`
+        AS product_type, pi.`total_amount`,rs.`id`,rs.`customer_product_code`,rs.`input_amount`,rs.`output_amount`,rs.`type`,rs.`create_time`,rs.`update_time`
         FROM `rpt_storage` rs
-        LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
+        LEFT JOIN `product_info` `pi` ON rs.`customer_product_code`=`pi`.`customer_product_code`
         LEFT JOIN `customer_info` ci ON ci.`id`= pi.`customer_id`
         where 1=1
         <if test="type!=null"> AND rs. `type` =#{type}</if>
-        <if test="productCode!=null and productCode!=''"> AND pi. `product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="customerProductCode!=null and customerProductCode!=''"> AND pi. `customer_product_code` like CONCAT('%',#{customerProductCode},'%')</if>
         <if test="startTime!=null and startTime!=''"> AND rs.`create_time` >= #{startTime}</if>
         <if test="endTime!=null and endTime!=''"> AND <![CDATA[ rs.`create_time` <= #{endTime} ]]> </if>
     </select>
@@ -34,7 +34,8 @@
     <select id="exportRptStorage" resultType="com.antaina.model.storage.RptStorageExportModel">
         SELECT
         ci.`name` AS customer_name,
-        rs.`product_code`,
+        rs.`customer_product_code`,
+        pi.product_code,
         pi.`product_name`,
         pi.`model` AS product_model,
         CASE pi.`type` WHEN 0 THEN '原料' WHEN 1 THEN '半成品' WHEN 2 THEN '成品' ELSE '未定义' END AS product_type,
@@ -46,11 +47,11 @@
         rs.`create_time`,
         rs.`update_time`
         FROM `rpt_storage` rs
-        LEFT JOIN `product_info` `pi` ON rs.`product_code`=`pi`.`product_code`
+        LEFT JOIN `product_info` `pi` ON rs.`customer_product_code`=`pi`.`customer_product_code`
         LEFT JOIN `customer_info` ci ON ci.`id`= pi.`customer_id`
         where 1=1
         <if test="type!=null"> AND rs. `type` =#{type}</if>
-        <if test="productCode!=null and productCode!=''"> AND pi. `product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="customerProductCode!=null and customerProductCode!=''"> AND pi. `customer_product_code` like CONCAT('%',#{customerProductCode},'%')</if>
         <if test="startTime!=null and startTime!=''"> AND rs.`create_time` >= #{startTime}</if>
         <if test="endTime!=null and endTime!=''"> AND <![CDATA[ rs.`create_time` <= #{endTime} ]]> </if>
     </select>

@@ -11,6 +11,8 @@ public class OrderInfoExportModel {
 
     private String customerName;
 
+    private String customerProductCode;
+
     private String productCode;
 
     private String productName;

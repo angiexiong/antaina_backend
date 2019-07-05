@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class StorageInputExportModel {
 
+    private String customerProductCode;
+
     private String productCode;
 
     private String productName;
@@ -14,8 +16,6 @@ public class StorageInputExportModel {
     private String productType;
 
     private String productUnit;
-
-    private String orderNo;
 
     private java.math.BigDecimal totalAmount;
 

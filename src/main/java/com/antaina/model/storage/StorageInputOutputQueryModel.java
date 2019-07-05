@@ -11,7 +11,7 @@ public class StorageInputOutputQueryModel {
 
 	private Long id;
 
-	private String productCode;
+	private String customerProductCode;
 
 	private java.math.BigDecimal amount;
 

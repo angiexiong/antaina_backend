@@ -28,8 +28,8 @@ public class StorageOutputController {
 
     @ApiOperation(value = "查询")
     @GetMapping("/getListWithPage")
-    public ResponseEntity getListWithPage(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
-        PageInfo page = storageOutputService.getListWithPage(baseModel, productCode, orderNo, type, startTime, endTime);
+    public ResponseEntity getListWithPage(BaseModel baseModel, String customerProductCode, String orderNo, Integer type, String startTime, String endTime){
+        PageInfo page = storageOutputService.getListWithPage(baseModel, customerProductCode, orderNo, type, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, page);
     }
 
@@ -56,8 +56,8 @@ public class StorageOutputController {
 
     @ApiOperation(value = "导出")
     @GetMapping("/exportOutput")
-    public ResponseEntity exportOutput(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
-        List<StorageOutputExportModel> list = storageOutputService.exportOutput(productCode, orderNo, type, startTime, endTime);
+    public ResponseEntity exportOutput(BaseModel baseModel, String customerProductCode, String orderNo, Integer type, String startTime, String endTime){
+        List<StorageOutputExportModel> list = storageOutputService.exportOutput(customerProductCode, orderNo, type, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }

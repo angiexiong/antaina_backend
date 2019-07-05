@@ -13,12 +13,12 @@ import java.util.List;
 public interface OrderInfoMapper extends Mapper<OrderInfo> {
 
     List<OrderInfoQueryModel> getOrderListByParams(@Param("orderNo") String orderNo,
-                                                   @Param("productCode") String productCode,
+                                                   @Param("customerProductCode") String customerProductCode,
                                                    @Param("status") Integer status,
                                                    @Param("startTime") String startTime,
                                                    @Param("endTime") String endTime);
 
-    List<OrderInfoExportModel> exportOrder(@Param("productCode") String productCode,
+    List<OrderInfoExportModel> exportOrder(@Param("customerProductCode") String customerProductCode,
                                            @Param("orderNo") String orderNo,
                                            @Param("status") Integer status,
                                            @Param("startTime") String startTime,

@@ -13,16 +13,10 @@ public class StorageInput {
 	private Long id;
 
 	/**
-	 * 订单编号
+	 * 客户物料编号
 	 */
-	@ApiModelProperty(value = "订单编号")
-	private String orderNo;
-
-	/**
-	 * 物料编号
-	 */
-	@ApiModelProperty(value = "物料编号")
-	private String productCode;
+	@ApiModelProperty(value = "客户物料编号")
+	private String customerProductCode;
 
 	/**
 	 * 入库量

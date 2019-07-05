@@ -9,6 +9,8 @@ public class RptStorageExportModel {
 
     private String customerName;
 
+    private String customerProductCode;
+
     private String productCode;
 
     private String productName;

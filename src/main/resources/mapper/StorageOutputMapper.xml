@@ -15,13 +15,13 @@
         </where>
     </update>
 
-    <select id="getInputListByParams" resultType="com.antaina.model.storage.StorageOutputQueryModel">
-        SELECT so.id,so.`product_code`,so.`order_no`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`, p.`total_amount`,
+    <select id="getOutputListByParams" resultType="com.antaina.model.storage.StorageOutputQueryModel">
+        SELECT so.id,so.`customer_product_code`,so.`order_no`,p.`product_code`,p.`product_name`,p.`model` AS product_model,p.`type` AS product_type, p.`product_unit`, p.`total_amount`,
         so.`amount`,so.`type`,so.`create_time`,so.`update_time`
         FROM `storage_output` so
-        LEFT JOIN `product_info` p ON p.`product_code` = so.`product_code`
+        LEFT JOIN `product_info` p ON p.`customer_product_code` = so.`customer_product_code`
         where 1=1
-        <if test="productCode!=null and productCode!=''"> AND so.`product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="customerProductCode!=null and customerProductCode!=''"> AND so.`customerProductCode` like CONCAT('%',#{customerProductCode},'%')</if>
         <if test="orderNo!=null and orderNo!=''"> AND so.`order_no` like CONCAT('%',#{orderNo},'%')</if>
         <if test="type!=null"> AND so.`type`=#{type}</if>
         <if test="startTime!=null and startTime!=''"> AND so.`create_time` >= #{startTime}</if>
@@ -35,7 +35,8 @@
 
     <select id="getExportOutputList" resultType="com.antaina.model.storage.StorageOutputExportModel">
         SELECT
-        so.`product_code`,
+        so.`customer_product_code`,
+        p.`product_code`,
         p.`product_name`,
         p.`model` AS product_model,
         CASE p.`type` WHEN 0 THEN '原料' WHEN 1 THEN '半成品' WHEN 2 THEN '成品' ELSE '未定义' END AS product_type,
@@ -47,9 +48,9 @@
         so.`create_time`,
         so.`update_time`
         FROM `storage_output` so
-        LEFT JOIN `product_info` p ON p.`product_code` = so.`product_code`
+        LEFT JOIN `product_info` p ON p.`customer_product_code` = so.`customer_product_code`
         where 1=1
-        <if test="productCode!=null and productCode!=''"> AND so.`product_code` like CONCAT('%',#{productCode},'%')</if>
+        <if test="customerProductCode!=null and customerProductCode!=''"> AND so.`customer_product_code` like CONCAT('%',#{customerProductCode},'%')</if>
         <if test="orderNo!=null and orderNo!=''"> AND so.`order_no` like CONCAT('%',#{orderNo},'%')</if>
         <if test="type!=null"> AND so.`type`=#{type}</if>
         <if test="startTime!=null and startTime!=''"> AND so.`create_time` >= #{startTime}</if>

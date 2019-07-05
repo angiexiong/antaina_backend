@@ -130,9 +130,15 @@ public enum MsgResult implements IRet {
 
     PRODUCT_ID_EMPTY(10026, "产品id不能为空"),
 
-    PRODUCT_INFO_EXIST_NO(10027, "物料信息不存在"),
+    PRODUCT_INFO_EXIST_NO(10027, "物料不存在"),
 
-    ORDER_INFO_EXIST_NO(10028, "订单号不存在");
+    ORDER_INFO_EXIST_NO(10028, "订单号不存在"),
+
+    CUSTOMER_PRODUCT_INFO_EXIST_NO(10029, "客户物料信息不存在"),
+
+    CUSTOMER_PRODUCT_CODE_EXIST_YES(10030, "客户物料编号已存在，不允许重复创建"),
+
+    STORAGE_AMOUNT_NOT_SUFFICIENT(10031, "库存不足");
 
     private final int code;
 

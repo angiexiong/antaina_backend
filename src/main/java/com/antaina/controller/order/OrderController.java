@@ -29,8 +29,8 @@ public class OrderController {
 
     @ApiOperation(value = "查询")
     @GetMapping("/getListWithPage")
-    public ResponseEntity getListWithPage(BaseModel baseModel, String orderNo, String productCode, Integer status, String startTime, String endTime) {
-        PageInfo page = orderInfoService.getListWithPage(baseModel, orderNo, productCode, status, startTime, endTime);
+    public ResponseEntity getListWithPage(BaseModel baseModel, String orderNo, String customerProductCode, Integer status, String startTime, String endTime) {
+        PageInfo page = orderInfoService.getListWithPage(baseModel, orderNo, customerProductCode, status, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, page);
     }
 
@@ -64,8 +64,8 @@ public class OrderController {
 
     @ApiOperation(value = "导出")
     @GetMapping("/exportOrder")
-    public ResponseEntity exportOutput(BaseModel baseModel, String productCode, String orderNo, Integer type, String startTime, String endTime){
-        List<OrderInfoExportModel> list = orderInfoService.exportOrder(productCode, orderNo, type, startTime, endTime);
+    public ResponseEntity exportOutput(BaseModel baseModel, String customerProductCode, String orderNo, Integer type, String startTime, String endTime){
+        List<OrderInfoExportModel> list = orderInfoService.exportOrder(customerProductCode, orderNo, type, startTime, endTime);
         return RespBuilder.build(BaseResult.SUCCESS, list);
     }
 }
