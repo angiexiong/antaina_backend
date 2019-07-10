@@ -21,7 +21,7 @@
         FROM `storage_output` so
         LEFT JOIN `product_info` p ON p.`customer_product_code` = so.`customer_product_code`
         where 1=1
-        <if test="customerProductCode!=null and customerProductCode!=''"> AND so.`customerProductCode` like CONCAT('%',#{customerProductCode},'%')</if>
+        <if test="customerProductCode!=null and customerProductCode!=''"> AND so.`customer_product_code` like CONCAT('%',#{customerProductCode},'%')</if>
         <if test="orderNo!=null and orderNo!=''"> AND so.`order_no` like CONCAT('%',#{orderNo},'%')</if>
         <if test="type!=null"> AND so.`type`=#{type}</if>
         <if test="startTime!=null and startTime!=''"> AND so.`create_time` >= #{startTime}</if>

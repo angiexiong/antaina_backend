@@ -82,7 +82,7 @@ public class OrderDeliveryDetailService {
         som.setOrderNo(orderInfo.getOrderNo());
         som.setCustomerProductCode(orderInfo.getCustomerProductCode());
         som.setAmount(orderDeliveryDetailModel.getAmount());
-        som.setType(StorageOutputTypeEnum.PRODUCTION.ordinal());
+        som.setType(StorageOutputTypeEnum.SELLING.ordinal());
         storageOutputService.add(som);
     }
 
